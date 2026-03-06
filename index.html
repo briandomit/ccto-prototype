@@ -392,11 +392,16 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
         <i class="fa-solid fa-plus text-sm" aria-hidden="true"></i> New Project
       </button>
     </div>
-    <div class="flex gap-5 border-b-2 border-border-gray mb-8">
-      <div class="tab active" data-tab="active" onclick="switchTab(this, 'active')">Active <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold text-white ml-1" style="background:#0C79A8;padding:0 6px;" id="active-count">11</span></div>
-      <div class="tab" data-tab="archived" onclick="switchTab(this, 'archived')">Archived <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;">0</span></div>
-      <div class="tab" data-tab="won" onclick="switchTab(this, 'won')">Won Bids <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;">0</span></div>
-      <div class="tab" data-tab="lost" onclick="switchTab(this, 'lost')">Lost Bids <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;">0</span></div>
+    <div class="flex items-end border-b-2 border-border-gray mb-8">
+      <div class="flex gap-5 flex-1" id="status-tabs">
+        <div class="tab active" data-tab="active" onclick="switchTab(this, 'active')">Active <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold text-white ml-1" style="background:#0C79A8;padding:0 6px;" id="active-count">11</span></div>
+        <div class="tab" data-tab="archived" onclick="switchTab(this, 'archived')">Archived <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;">0</span></div>
+        <div class="tab" data-tab="won" onclick="switchTab(this, 'won')">Won Bids <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;">0</span></div>
+        <div class="tab" data-tab="lost" onclick="switchTab(this, 'lost')">Lost Bids <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;">0</span></div>
+      </div>
+      <button class="btn-link flex-shrink-0 mb-1" onclick="openModal('modal-add-status')" style="height:32px;font-size:13px">
+        <i class="fa-solid fa-plus text-xs"></i> New Status
+      </button>
     </div>
     <div class="flex-1 overflow-y-auto">
       <table class="w-full" id="projects-table">
@@ -895,6 +900,26 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
   </div>
 </div>
 
+<!-- ================= MODAL: ADD STATUS ================= -->
+<div id="modal-add-status" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-add-status')">
+  <div class="modal-box" style="width:480px">
+    <div class="modal-header">
+      <h3>Add Status</h3>
+      <button class="text-placeholder hover:text-body-dark bg-transparent border-none cursor-pointer text-lg" onclick="closeModal('modal-add-status')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <p class="text-base font-medium text-black mb-4">Create a new status tab for organizing your projects.</p>
+      <label class="input-label">Status Name</label>
+      <input type="text" class="input-field" id="add-status-input" placeholder="e.g. Pending Review, On Hold, In Progress">
+      <p class="text-xs font-semibold text-secondary-text mt-2">This will appear as a new tab on the Projects page.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-add-status')">Cancel</button>
+      <button class="btn-primary" onclick="confirmAddStatus()">Add Status</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ===================== DATA =====================
 const projects = [
@@ -1174,6 +1199,22 @@ function handleTakeoffNav() {
 }
 
 // ===================== TABS =====================
+function confirmAddStatus() {
+  const input = document.getElementById('add-status-input');
+  const name = input.value.trim();
+  if (!name) return;
+  const key = name.toLowerCase().replace(/\s+/g,'-');
+  const tabsContainer = document.getElementById('status-tabs');
+  const newTab = document.createElement('div');
+  newTab.className = 'tab';
+  newTab.setAttribute('data-tab', key);
+  newTab.onclick = function() { switchTab(this, key); };
+  newTab.innerHTML = name + ' <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;">0</span>';
+  tabsContainer.appendChild(newTab);
+  input.value = '';
+  closeModal('modal-add-status');
+}
+
 function switchTab(el, tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
