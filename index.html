@@ -1048,12 +1048,12 @@ function renderDocumentsTable() {
                <button class="text-muted hover:text-body-dark bg-transparent border-none cursor-pointer text-xs p-1" onclick="event.stopPropagation();moveRowUp('${d.id}')"><i class="fa-solid fa-chevron-up"></i></button>
                <button class="text-muted hover:text-body-dark bg-transparent border-none cursor-pointer text-xs p-1" onclick="event.stopPropagation();moveRowDown('${d.id}')"><i class="fa-solid fa-chevron-down"></i></button>
              </div>`
-          : `<div class="inline-actions flex items-center justify-end gap-5">
-               <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();openDocumentViewer(findDocById('${d.id}'))">View</a>
-               <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();openRenameModal(findDocById('${d.id}'))">Rename</a>
-               <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();duplicateDocument(findDocById('${d.id}'))">Duplicate</a>
-               <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();openMoveModal(findDocById('${d.id}'))">Move</a>
-               <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();archiveDocument(findDocById('${d.id}'))">Archive</a>
+          : `<div class="inline-actions flex items-center justify-end gap-4">
+               <a href="#" class="text-muted hover:text-primary" title="View" onclick="event.preventDefault();event.stopPropagation();openDocumentViewer(findDocById('${d.id}'))"><i class="fa-solid fa-eye"></i></a>
+               <a href="#" class="text-muted hover:text-primary" title="Rename" onclick="event.preventDefault();event.stopPropagation();openRenameModal(findDocById('${d.id}'))"><i class="fa-solid fa-pen"></i></a>
+               <a href="#" class="text-muted hover:text-primary" title="Duplicate" onclick="event.preventDefault();event.stopPropagation();duplicateDocument(findDocById('${d.id}'))"><i class="fa-regular fa-copy"></i></a>
+               <a href="#" class="text-muted hover:text-primary" title="Move" onclick="event.preventDefault();event.stopPropagation();openMoveModal(findDocById('${d.id}'))"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+               <a href="#" class="text-muted hover:text-primary" title="Archive" onclick="event.preventDefault();event.stopPropagation();archiveDocument(findDocById('${d.id}'))"><i class="fa-solid fa-box-archive"></i></a>
              </div>`
         }
       </td>
