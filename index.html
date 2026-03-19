@@ -487,7 +487,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
             <th class="table-header text-left p-2.5 w-[100px]">Page # <i class="fa-solid fa-sort text-muted ml-1 sort-icon"></i></th>
             <th class="table-header text-left p-2.5 w-[140px]">Doc # <i class="fa-solid fa-sort text-muted ml-1 sort-icon"></i></th>
             <th class="table-header text-left p-2.5">Document Name <i class="fa-solid fa-sort text-muted ml-1 sort-icon"></i></th>
-            <th class="table-header text-left p-2.5">Actions</th>
+            <th class="table-header text-right p-2.5">Actions</th>
             <th class="text-right p-2.5 whitespace-nowrap" id="doc-header-actions">
               <span id="doc-action-buttons" class="inline-flex items-center gap-1">
                 <button class="btn-link" onclick="openModal('modal-add-documents')" id="btn-add-doc" style="height:32px;font-size:12px">
@@ -1050,12 +1050,12 @@ function renderDocumentsTable() {
                <button class="text-muted hover:text-body-dark bg-transparent border-none cursor-pointer text-xs p-1" onclick="event.stopPropagation();moveRowUp('${d.id}')"><i class="fa-solid fa-chevron-up"></i></button>
                <button class="text-muted hover:text-body-dark bg-transparent border-none cursor-pointer text-xs p-1" onclick="event.stopPropagation();moveRowDown('${d.id}')"><i class="fa-solid fa-chevron-down"></i></button>
              </div>`
-          : `<div class="inline-actions flex items-center gap-3">
+          : `<div class="inline-actions flex items-center justify-end gap-5">
                <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();openDocumentViewer(findDocById('${d.id}'))">View</a>
                <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();openRenameModal(findDocById('${d.id}'))">Rename</a>
                <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();duplicateDocument(findDocById('${d.id}'))">Duplicate</a>
                <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();openMoveModal(findDocById('${d.id}'))">Move</a>
-               <a href="#" class="text-xs font-medium hover:underline" style="color:#88888E" onclick="event.preventDefault();event.stopPropagation();archiveDocument(findDocById('${d.id}'))">Archive</a>
+               <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();archiveDocument(findDocById('${d.id}'))">Archive</a>
              </div>`
         }
       </td>
