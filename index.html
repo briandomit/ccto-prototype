@@ -462,12 +462,10 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
   <!-- Main document area -->
   <div class="flex-1 flex flex-col h-full overflow-hidden pt-4" style="padding-left:88px;padding-right:88px;">
     <!-- AI banner (top of document area) -->
-    <div id="ai-banner" class="mx-0 mb-3 mt-0 px-4 py-3 rounded flex items-center gap-3" style="background:#F4F4F4;">
-      <i class="fa-solid fa-triangle-exclamation text-lg" style="color:#C56200"></i>
-      <span class="text-sm font-medium flex-1" style="color:#1C1E21">Your documents were named and organized by AI. Please review your files to confirm accuracy.</span>
-      <button class="text-sm hover:text-body-dark bg-transparent border-none cursor-pointer pl-3" style="color:#88888E" onclick="document.getElementById('ai-banner').style.display='none'">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+    <div id="ai-banner" class="mx-0 mb-3 mt-0 px-4 py-3 rounded flex items-center gap-3" style="background:#EFE5DC;">
+      <i class="fa-solid fa-triangle-exclamation text-lg flex-shrink-0" style="color:#C56200"></i>
+      <span class="text-sm font-medium flex-1" style="color:#1C1E21">Your documents have been automatically named and organized by AI. Review the names and folder placement below to make sure everything looks right.</span>
+      <button class="text-sm font-semibold bg-transparent border border-current rounded px-3 py-1.5 cursor-pointer whitespace-nowrap ml-2" style="color:#1C1E21" onclick="document.getElementById('ai-banner').style.display='none'">I understand</button>
     </div>
 
     <!-- #8: Project header on ONE line + Takeoff button -->
@@ -486,10 +484,10 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
       <table class="w-full" id="documents-table">
         <thead id="doc-thead">
           <tr class="border-b-2 border-body-dark">
-            <th class="table-header text-left p-2.5 w-[140px]">Page Number <i class="fa-solid fa-sort text-muted ml-1 sort-icon"></i></th>
-            <th class="table-header text-left p-2.5 w-[180px]">Document Number <i class="fa-solid fa-sort text-muted ml-1 sort-icon"></i></th>
+            <th class="table-header text-left p-2.5 w-[100px]">Page # <i class="fa-solid fa-sort text-muted ml-1 sort-icon"></i></th>
+            <th class="table-header text-left p-2.5 w-[140px]">Doc # <i class="fa-solid fa-sort text-muted ml-1 sort-icon"></i></th>
             <th class="table-header text-left p-2.5">Document Name <i class="fa-solid fa-sort text-muted ml-1 sort-icon"></i></th>
-            <!-- #9: action buttons right-aligned in header row, Add Doc first -->
+            <th class="table-header text-left p-2.5">Actions</th>
             <th class="text-right p-2.5 whitespace-nowrap" id="doc-header-actions">
               <span id="doc-action-buttons" class="inline-flex items-center gap-1">
                 <button class="btn-link" onclick="openModal('modal-add-documents')" id="btn-add-doc" style="height:32px;font-size:12px">
@@ -905,7 +903,7 @@ function makeAIDocs() {
       { id: 'd21', page: 21, docNum: 'AD01', name: 'Addendum 1 - Revised Kitchen Layout', folder: 'addendas' },
       { id: 'd22', page: 22, docNum: 'AD02', name: 'Addendum 2 - Updated Equipment List', folder: 'addendas' },
     ],
-    deleted: []
+    archive: []
   };
 }
 
@@ -950,7 +948,7 @@ function getDocsForFolder(folderKey) {
   const fs = state.folderStructure;
   if (!fs) return [];
   if (folderKey === 'all') return getAllDocs();
-  if (folderKey === 'deleted') return fs.deleted || [];
+  if (folderKey === 'archive') return fs.archive || [];
   if (folderKey === 'specs') return fs.specs || [];
   if (folderKey === 'addendas') return fs.addendas || [];
   if (folderKey === 'plans') return fs.plans || [];
@@ -965,7 +963,7 @@ function findDocById(id) {
   let f = (fs.plans || []).find(d => d.id === id); if (f) return f;
   f = (fs.specs || []).find(d => d.id === id); if (f) return f;
   f = (fs.addendas || []).find(d => d.id === id); if (f) return f;
-  f = (fs.deleted || []).find(d => d.id === id); if (f) return f;
+  f = (fs.archive || []).find(d => d.id === id); if (f) return f;
   for (const ct of state.customTypes) { f = (ct.docs || []).find(d => d.id === id); if (f) return f; }
   if (state.noAIDocs) { f = state.noAIDocs.find(d => d.id === id); if (f) return f; }
   return null;
@@ -976,7 +974,7 @@ function removeDocFromCurrent(doc) {
   let i = (fs.plans || []).indexOf(doc); if (i >= 0) { fs.plans.splice(i, 1); return; }
   i = (fs.specs || []).indexOf(doc); if (i >= 0) { fs.specs.splice(i, 1); return; }
   i = (fs.addendas || []).indexOf(doc); if (i >= 0) { fs.addendas.splice(i, 1); return; }
-  i = (fs.deleted || []).indexOf(doc); if (i >= 0) { fs.deleted.splice(i, 1); return; }
+  i = (fs.archive || []).indexOf(doc); if (i >= 0) { fs.archive.splice(i, 1); return; }
   for (const ct of state.customTypes) { i = (ct.docs || []).indexOf(doc); if (i >= 0) { ct.docs.splice(i, 1); return; } }
 }
 
@@ -1008,7 +1006,7 @@ function renderFolderTree() {
   if (!state.aiEnabled) {
     container.innerHTML = `
       <div class="folder-item ${state.selectedFolder==='all'?'selected':''}" onclick="selectFolder('all')">All Documents</div>
-      <div class="folder-item ${state.selectedFolder==='deleted'?'selected':''}" onclick="selectFolder('deleted')">Deleted</div>
+      <div class="folder-item ${state.selectedFolder==='archive'?'selected':''}" onclick="selectFolder('archive')">Archive</div>
     `;
     return;
   }
@@ -1020,7 +1018,7 @@ function renderFolderTree() {
   for (const ct of state.customTypes) {
     html += `<div class="folder-item ${state.selectedFolder===ct.key?'selected':''}" onclick="selectFolder('${ct.key}')">${ct.name}</div>`;
   }
-  html += `<div class="folder-item ${state.selectedFolder==='deleted'?'selected':''}" onclick="selectFolder('deleted')">Deleted</div>`;
+  html += `<div class="folder-item ${state.selectedFolder==='archive'?'selected':''}" onclick="selectFolder('archive')">Archive</div>`;
   container.innerHTML = html;
 }
 
@@ -1029,14 +1027,14 @@ function renderDocumentsTable() {
   const tbody = document.getElementById('documents-tbody');
   let docs;
   if (!state.aiEnabled) {
-    docs = (state.selectedFolder === 'deleted') ? (state.folderStructure ? state.folderStructure.deleted : []) : (state.noAIDocs || []);
+    docs = (state.selectedFolder === 'archive') ? (state.folderStructure ? state.folderStructure.archive : []) : (state.noAIDocs || []);
   } else {
     docs = getDocsForFolder(state.selectedFolder);
   }
   const sortIcons = document.querySelectorAll('.sort-icon');
   sortIcons.forEach(el => { el.style.opacity = state.reorderMode ? '0.3' : '1'; el.style.pointerEvents = state.reorderMode ? 'none' : 'auto'; });
   if (docs.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-16 text-muted text-lg">No documents in this folder</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-16 text-muted text-lg">No documents in this folder</td></tr>';
     return;
   }
   tbody.innerHTML = docs.map((d, i) => `
@@ -1046,14 +1044,19 @@ function renderDocumentsTable() {
       <td class="table-cell" style="color:#1C1E21">${d.page}</td>
       <td class="table-cell" style="color:#1C1E21">${d.docNum}</td>
       <td class="table-cell">${d.name}</td>
-      <td></td>
-      <td class="p-2.5">
+      <td class="table-cell whitespace-nowrap">
         ${state.reorderMode
-          ? `<div class="flex flex-col items-center gap-0.5">
+          ? `<div class="flex items-center gap-1">
                <button class="text-muted hover:text-body-dark bg-transparent border-none cursor-pointer text-xs p-1" onclick="event.stopPropagation();moveRowUp('${d.id}')"><i class="fa-solid fa-chevron-up"></i></button>
                <button class="text-muted hover:text-body-dark bg-transparent border-none cursor-pointer text-xs p-1" onclick="event.stopPropagation();moveRowDown('${d.id}')"><i class="fa-solid fa-chevron-down"></i></button>
              </div>`
-          : `<div class="meatball" onclick="event.stopPropagation();showDocMenu(event, '${d.id}')"><i class="fa-solid fa-ellipsis-vertical"></i></div>`
+          : `<div class="inline-actions flex items-center gap-3">
+               <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();openDocumentViewer(findDocById('${d.id}'))">View</a>
+               <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();openRenameModal(findDocById('${d.id}'))">Rename</a>
+               <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();duplicateDocument(findDocById('${d.id}'))">Duplicate</a>
+               <a href="#" class="text-xs font-medium text-primary hover:underline" onclick="event.preventDefault();event.stopPropagation();openMoveModal(findDocById('${d.id}'))">Move</a>
+               <a href="#" class="text-xs font-medium hover:underline" style="color:#88888E" onclick="event.preventDefault();event.stopPropagation();archiveDocument(findDocById('${d.id}'))">Archive</a>
+             </div>`
         }
       </td>
     </tr>
@@ -1236,7 +1239,7 @@ function showDocMenu(e, docId) {
     <div class="ctx-menu-item" onclick="menuAction('rename')"><i class="fa-solid fa-pen text-sm text-muted mr-3"></i>Rename</div>
     <div class="ctx-menu-item" onclick="menuAction('duplicateDoc')"><i class="fa-regular fa-copy text-sm text-muted mr-3"></i>Duplicate</div>
     <div class="ctx-menu-item" onclick="menuAction('moveDoc')"><i class="fa-solid fa-arrow-right-arrow-left text-sm text-muted mr-3"></i>Move to</div>
-    <div class="ctx-menu-item" onclick="menuAction('deleteDoc')"><i class="fa-solid fa-trash text-sm text-muted mr-3"></i>Delete</div>
+    <div class="ctx-menu-item" onclick="menuAction('archiveDoc')"><i class="fa-solid fa-box-archive text-sm text-muted mr-3"></i>Archive</div>
   `;
   positionMenu(menu, e);
 }
@@ -1276,7 +1279,7 @@ function menuAction(action) {
     if (!doc) return;
     if (action === 'rename') openRenameModal(doc);
     else if (action === 'moveDoc') openMoveModal(doc);
-    else if (action === 'deleteDoc') softDeleteDocument(doc);
+    else if (action === 'archiveDoc') archiveDocument(doc);
     else if (action === 'viewDoc') openDocumentViewer(doc);
     else if (action === 'duplicateDoc') duplicateDocument(doc);
   }
@@ -1338,18 +1341,18 @@ function confirmMoveDocument() {
   renderDocumentsTable();
 }
 
-// ===================== SOFT DELETE =====================
-function softDeleteDocument(doc) {
+// ===================== ARCHIVE =====================
+function archiveDocument(doc) {
   removeDocFromCurrent(doc);
-  doc.folder = 'deleted';
-  state.folderStructure.deleted.push(doc);
+  doc.folder = 'archive';
+  state.folderStructure.archive.push(doc);
   renderFolderTree();
   renderDocumentsTable();
 }
 
 // ===================== DUPLICATE =====================
 function duplicateDocument(doc) {
-  const nd = { ...doc, id: 'd' + Date.now(), name: doc.name + ' (Copy)', page: getAllDocs().length + (state.folderStructure.deleted || []).length + 1 };
+  const nd = { ...doc, id: 'd' + Date.now(), name: doc.name + ' (Copy)', page: getAllDocs().length + (state.folderStructure.archive || []).length + 1 };
   const fs = state.folderStructure;
   if (doc.folder === 'plans') fs.plans.push(nd);
   else if (doc.folder === 'specs') fs.specs.push(nd);
@@ -1369,7 +1372,7 @@ function addDocumentType() {
 function simulateAddDocuments() {
   const folder = document.getElementById('add-doc-type').value;
   const allDocs = getAllDocs();
-  const np = allDocs.length + (state.folderStructure ? state.folderStructure.deleted.length : 0) + 1;
+  const np = allDocs.length + (state.folderStructure ? state.folderStructure.archive.length : 0) + 1;
   const fs = state.folderStructure;
   const nds = [
     { id: 'new'+Date.now(), page: np, docNum: 'NEW-01', name: 'Uploaded Document 1', folder },
