@@ -462,10 +462,10 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
   <!-- Main document area -->
   <div class="flex-1 flex flex-col h-full overflow-hidden pt-4" style="padding-left:88px;padding-right:88px;">
     <!-- AI banner (top of document area) -->
-    <div id="ai-banner" class="mx-0 mb-3 mt-0 px-4 py-3 rounded flex items-center gap-3" style="background: linear-gradient(90deg, rgba(0,161,224,0.1), #F4F4F4);">
-      <i class="fa-solid fa-circle-info text-lg" style="color:#00A1E0"></i>
-      <span class="text-xs font-semibold text-placeholder flex-1">Your documents were named and organized by AI. Please review your files to confirm accuracy.</span>
-      <button class="text-sm text-placeholder hover:text-body-dark bg-transparent border-none cursor-pointer pl-3" onclick="document.getElementById('ai-banner').style.display='none'" style="border-left:1px solid #88888E">
+    <div id="ai-banner" class="mx-0 mb-3 mt-0 px-4 py-3 rounded flex items-center gap-3" style="background:#F4F4F4;">
+      <i class="fa-solid fa-triangle-exclamation text-lg" style="color:#C56200"></i>
+      <span class="text-sm font-medium flex-1" style="color:#1C1E21">Your documents were named and organized by AI. Please review your files to confirm accuracy.</span>
+      <button class="text-sm hover:text-body-dark bg-transparent border-none cursor-pointer pl-3" style="color:#88888E" onclick="document.getElementById('ai-banner').style.display='none'">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
@@ -764,47 +764,6 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
     <footer class="modal-footer">
       <button type="button" class="btn-secondary" onclick="closeBlueprintModal('modal-add-project-1')">Cancel</button>
       <div class="modal-footer-right">
-        <button type="button" class="btn-primary" onclick="closeBlueprintModal('modal-add-project-1');openBlueprintModal('modal-add-project-2')">Next <i class="fa-solid fa-arrow-right text-sm" aria-hidden="true"></i></button>
-      </div>
-    </footer>
-  </div>
-</div>
-
-<!-- ================= MODAL: ADD PROJECT STEP 2 (Blueprint DrawerModal + Checkbox Field) ================= -->
-<div id="modal-add-project-2" class="modal-overlay" onclick="if(event.target===this)closeBlueprintModal('modal-add-project-2')">
-  <div class="modal-box" style="width:540px"
-       role="dialog" aria-modal="true" aria-labelledby="add-project-2-title" aria-describedby="add-project-2-desc">
-    <header class="modal-header">
-      <h2 id="add-project-2-title">Add a New Project</h2>
-      <button type="button" class="modal-close-btn" aria-label="Close add project dialog" onclick="closeBlueprintModal('modal-add-project-2')">
-        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-      </button>
-    </header>
-    <div class="modal-body" role="document" id="add-project-2-desc">
-      <p class="text-xl font-medium text-black mb-6">Our AI can help organize your documents automatically. Choose which features to use.</p>
-      <fieldset style="border:none;padding:0;margin:0">
-        <legend class="sr-only">AI Features</legend>
-        <div class="flex flex-col gap-3">
-          <label class="bp-checkbox">
-            <input type="checkbox" checked id="ai-autoname" aria-describedby="ai-autoname-desc">
-            <div>
-              <span class="bp-checkbox-label">Autoname and categorize your documents</span>
-              <p class="bp-checkbox-desc" id="ai-autoname-desc">Uses AI to read page titles and sheet numbers</p>
-            </div>
-          </label>
-          <label class="bp-checkbox">
-            <input type="checkbox" checked id="ai-scale" aria-describedby="ai-scale-desc">
-            <div>
-              <span class="bp-checkbox-label">Set the scale on your drawings</span>
-              <p class="bp-checkbox-desc" id="ai-scale-desc">Automatically detects drawing scale</p>
-            </div>
-          </label>
-        </div>
-      </fieldset>
-    </div>
-    <footer class="modal-footer">
-      <button type="button" class="btn-secondary" onclick="closeBlueprintModal('modal-add-project-2');openBlueprintModal('modal-add-project-1')"><i class="fa-solid fa-arrow-left text-sm" aria-hidden="true"></i> Back</button>
-      <div class="modal-footer-right">
         <button type="button" class="btn-primary" onclick="createNewProject()">Create Project</button>
       </div>
     </footer>
@@ -845,26 +804,6 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeModal('modal-rename-document')">Cancel</button>
       <button class="btn-primary" onclick="confirmRenameDocument()">Rename</button>
-    </div>
-  </div>
-</div>
-
-<!-- ================= MODAL: ADD PLAN TYPE ================= -->
-<div id="modal-add-plan-type" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-add-plan-type')">
-  <div class="modal-box" style="width:480px">
-    <div class="modal-header">
-      <h3>Add Plan Type</h3>
-      <button class="text-placeholder hover:text-body-dark bg-transparent border-none cursor-pointer text-lg" onclick="closeModal('modal-add-plan-type')"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="modal-body">
-      <p class="text-base font-medium text-black mb-4">Create a new plan type to organize your documents.</p>
-      <label class="input-label">Plan Type Name</label>
-      <input type="text" class="input-field" id="add-plan-type-input" placeholder="e.g. Mechanical, Structural, Civil">
-      <p class="text-xs font-semibold text-secondary-text mt-2">This will appear as a subfolder under Plans in the document tree.</p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-secondary" onclick="closeModal('modal-add-plan-type')">Cancel</button>
-      <button class="btn-primary" onclick="confirmAddPlanType()">Add Type</button>
     </div>
   </div>
 </div>
@@ -938,31 +877,23 @@ const projects = [
 
 function makeAIDocs() {
   return {
-    plans: {
-      subtypes: {
-        architectural: [
-          { id: 'd1', page: 1, docNum: 'A01', name: 'Lobby & Entrance Floor Plan', folder: 'plans', subtype: 'architectural' },
-          { id: 'd2', page: 2, docNum: 'A02', name: 'Main Dining Room Layout', folder: 'plans', subtype: 'architectural' },
-          { id: 'd3', page: 3, docNum: 'A03', name: 'Kitchen Floor Plan', folder: 'plans', subtype: 'architectural' },
-          { id: 'd4', page: 4, docNum: 'A04', name: 'Bar Area Layout', folder: 'plans', subtype: 'architectural' },
-          { id: 'd5', page: 5, docNum: 'A05', name: 'Restroom Floor Plans', folder: 'plans', subtype: 'architectural' },
-          { id: 'd6', page: 6, docNum: 'A06', name: 'Office & Storage Areas', folder: 'plans', subtype: 'architectural' },
-          { id: 'd7', page: 7, docNum: 'A07', name: 'Outdoor Patio Plan', folder: 'plans', subtype: 'architectural' },
-        ],
-        electrical: [
-          { id: 'd8', page: 8, docNum: 'E01', name: 'Main Electrical Panel Schedule', folder: 'plans', subtype: 'electrical' },
-          { id: 'd9', page: 9, docNum: 'E02', name: 'Kitchen Electrical Layout', folder: 'plans', subtype: 'electrical' },
-          { id: 'd10', page: 10, docNum: 'E03', name: 'Dining Room Lighting Plan', folder: 'plans', subtype: 'electrical' },
-          { id: 'd11', page: 11, docNum: 'E04', name: 'Emergency Lighting & Exit Signs', folder: 'plans', subtype: 'electrical' },
-        ],
-        plumbing: [
-          { id: 'd12', page: 12, docNum: 'P01', name: 'Kitchen Plumbing Layout', folder: 'plans', subtype: 'plumbing' },
-          { id: 'd13', page: 13, docNum: 'P02', name: 'Restroom Plumbing Plan', folder: 'plans', subtype: 'plumbing' },
-          { id: 'd14', page: 14, docNum: 'P03', name: 'Bar Area Plumbing', folder: 'plans', subtype: 'plumbing' },
-          { id: 'd15', page: 15, docNum: 'P04', name: 'Gas Line Routing', folder: 'plans', subtype: 'plumbing' },
-        ],
-      }
-    },
+    plans: [
+      { id: 'd1', page: 1, docNum: 'A01', name: 'Lobby & Entrance Floor Plan', folder: 'plans' },
+      { id: 'd2', page: 2, docNum: 'A02', name: 'Main Dining Room Layout', folder: 'plans' },
+      { id: 'd3', page: 3, docNum: 'A03', name: 'Kitchen Floor Plan', folder: 'plans' },
+      { id: 'd4', page: 4, docNum: 'A04', name: 'Bar Area Layout', folder: 'plans' },
+      { id: 'd5', page: 5, docNum: 'A05', name: 'Restroom Floor Plans', folder: 'plans' },
+      { id: 'd6', page: 6, docNum: 'A06', name: 'Office & Storage Areas', folder: 'plans' },
+      { id: 'd7', page: 7, docNum: 'A07', name: 'Outdoor Patio Plan', folder: 'plans' },
+      { id: 'd8', page: 8, docNum: 'E01', name: 'Main Electrical Panel Schedule', folder: 'plans' },
+      { id: 'd9', page: 9, docNum: 'E02', name: 'Kitchen Electrical Layout', folder: 'plans' },
+      { id: 'd10', page: 10, docNum: 'E03', name: 'Dining Room Lighting Plan', folder: 'plans' },
+      { id: 'd11', page: 11, docNum: 'E04', name: 'Emergency Lighting & Exit Signs', folder: 'plans' },
+      { id: 'd12', page: 12, docNum: 'P01', name: 'Kitchen Plumbing Layout', folder: 'plans' },
+      { id: 'd13', page: 13, docNum: 'P02', name: 'Restroom Plumbing Plan', folder: 'plans' },
+      { id: 'd14', page: 14, docNum: 'P03', name: 'Bar Area Plumbing', folder: 'plans' },
+      { id: 'd15', page: 15, docNum: 'P04', name: 'Gas Line Routing', folder: 'plans' },
+    ],
     specs: [
       { id: 'd16', page: 16, docNum: 'SP01', name: 'Kitchen Equipment Specifications', folder: 'specs' },
       { id: 'd17', page: 17, docNum: 'SP02', name: 'HVAC System Specifications', folder: 'specs' },
@@ -1000,7 +931,6 @@ let state = {
   folderStructure: null,
   noAIDocs: null,
   customTypes: [],
-  customSubtypes: [],
 };
 
 // ===================== HELPERS =====================
@@ -1009,28 +939,21 @@ function getAllDocs() {
   const fs = state.folderStructure;
   if (!fs) return [];
   let all = [];
-  if (fs.plans && fs.plans.subtypes) {
-    for (const st of Object.keys(fs.plans.subtypes)) all = all.concat(fs.plans.subtypes[st]);
-  }
+  all = all.concat(fs.plans || []);
   all = all.concat(fs.specs || []);
   all = all.concat(fs.addendas || []);
   for (const ct of state.customTypes) all = all.concat(ct.docs || []);
   return all;
 }
 
-function getDocsForFolder(folderKey, subtypeKey) {
+function getDocsForFolder(folderKey) {
   const fs = state.folderStructure;
   if (!fs) return [];
   if (folderKey === 'all') return getAllDocs();
   if (folderKey === 'deleted') return fs.deleted || [];
   if (folderKey === 'specs') return fs.specs || [];
   if (folderKey === 'addendas') return fs.addendas || [];
-  if (folderKey === 'plans' && !subtypeKey) {
-    let all = [];
-    if (fs.plans && fs.plans.subtypes) { for (const st of Object.keys(fs.plans.subtypes)) all = all.concat(fs.plans.subtypes[st]); }
-    return all;
-  }
-  if (folderKey === 'plans' && subtypeKey) return (fs.plans && fs.plans.subtypes && fs.plans.subtypes[subtypeKey]) || [];
+  if (folderKey === 'plans') return fs.plans || [];
   const ct = state.customTypes.find(t => t.key === folderKey);
   if (ct) return ct.docs || [];
   return [];
@@ -1039,10 +962,8 @@ function getDocsForFolder(folderKey, subtypeKey) {
 function findDocById(id) {
   const fs = state.folderStructure;
   if (!fs) return null;
-  if (fs.plans && fs.plans.subtypes) {
-    for (const st of Object.keys(fs.plans.subtypes)) { const f = fs.plans.subtypes[st].find(d => d.id === id); if (f) return f; }
-  }
-  let f = (fs.specs || []).find(d => d.id === id); if (f) return f;
+  let f = (fs.plans || []).find(d => d.id === id); if (f) return f;
+  f = (fs.specs || []).find(d => d.id === id); if (f) return f;
   f = (fs.addendas || []).find(d => d.id === id); if (f) return f;
   f = (fs.deleted || []).find(d => d.id === id); if (f) return f;
   for (const ct of state.customTypes) { f = (ct.docs || []).find(d => d.id === id); if (f) return f; }
@@ -1052,10 +973,8 @@ function findDocById(id) {
 
 function removeDocFromCurrent(doc) {
   const fs = state.folderStructure;
-  if (fs.plans && fs.plans.subtypes) {
-    for (const st of Object.keys(fs.plans.subtypes)) { const i = fs.plans.subtypes[st].indexOf(doc); if (i >= 0) { fs.plans.subtypes[st].splice(i, 1); return; } }
-  }
-  let i = (fs.specs || []).indexOf(doc); if (i >= 0) { fs.specs.splice(i, 1); return; }
+  let i = (fs.plans || []).indexOf(doc); if (i >= 0) { fs.plans.splice(i, 1); return; }
+  i = (fs.specs || []).indexOf(doc); if (i >= 0) { fs.specs.splice(i, 1); return; }
   i = (fs.addendas || []).indexOf(doc); if (i >= 0) { fs.addendas.splice(i, 1); return; }
   i = (fs.deleted || []).indexOf(doc); if (i >= 0) { fs.deleted.splice(i, 1); return; }
   for (const ct of state.customTypes) { i = (ct.docs || []).indexOf(doc); if (i >= 0) { ct.docs.splice(i, 1); return; } }
@@ -1095,17 +1014,7 @@ function renderFolderTree() {
   }
   const fs = state.folderStructure;
   let html = '';
-  html += `<div class="folder-item ${state.selectedFolder==='plans'&&!state.selectedSubtype?'selected':''}" onclick="selectFolder('plans')">Plans <span class="ml-auto text-xs text-muted cursor-pointer hover:text-primary" onclick="event.stopPropagation();addPlanSubtype()">+</span></div>`;
-  if (fs && fs.plans && fs.plans.subtypes) {
-    for (const st of Object.keys(fs.plans.subtypes)) {
-      const label = st.charAt(0).toUpperCase() + st.slice(1);
-      html += `<div class="folder-item sub ${state.selectedFolder==='plans'&&state.selectedSubtype===st?'selected':''}" onclick="selectFolder('plans','${st}')">${label}</div>`;
-    }
-  }
-  for (const cst of state.customSubtypes) {
-    html += `<div class="folder-item sub ${state.selectedFolder==='plans'&&state.selectedSubtype===cst.key?'selected':''}" onclick="selectFolder('plans','${cst.key}')">${cst.name}</div>`;
-  }
-  html += `<div class="folder-item sub" style="color:#0C79A8;font-weight:500;cursor:pointer" onclick="addPlanSubtype()"><span>Add Plan Type</span><span class="ml-auto">+</span></div>`;
+  html += `<div class="folder-item ${state.selectedFolder==='plans'?'selected':''}" onclick="selectFolder('plans')">Plans</div>`;
   html += `<div class="folder-item ${state.selectedFolder==='specs'?'selected':''}" onclick="selectFolder('specs')">Specs</div>`;
   html += `<div class="folder-item ${state.selectedFolder==='addendas'?'selected':''}" onclick="selectFolder('addendas')">Addendas</div>`;
   for (const ct of state.customTypes) {
@@ -1122,7 +1031,7 @@ function renderDocumentsTable() {
   if (!state.aiEnabled) {
     docs = (state.selectedFolder === 'deleted') ? (state.folderStructure ? state.folderStructure.deleted : []) : (state.noAIDocs || []);
   } else {
-    docs = getDocsForFolder(state.selectedFolder, state.selectedSubtype);
+    docs = getDocsForFolder(state.selectedFolder);
   }
   const sortIcons = document.querySelectorAll('.sort-icon');
   sortIcons.forEach(el => { el.style.opacity = state.reorderMode ? '0.3' : '1'; el.style.pointerEvents = state.reorderMode ? 'none' : 'auto'; });
@@ -1168,9 +1077,8 @@ function navigateToDocuments(projectId) {
   const proj = projects.find(p => p.id === projectId);
   if (!proj) return;
   state.selectedProject = proj;
-  state.aiEnabled = document.getElementById('ai-autoname') ? document.getElementById('ai-autoname').checked : true;
-  state.selectedFolder = state.aiEnabled ? 'plans' : 'all';
-  state.selectedSubtype = state.aiEnabled ? 'architectural' : null;
+  state.aiEnabled = true;
+  state.selectedFolder = 'plans';
   state.reorderMode = false;
   state.folderStructure = makeAIDocs();
   state.noAIDocs = makeNoAIDocs(22);
@@ -1223,9 +1131,8 @@ function switchTab(el, tab) {
 }
 
 // ===================== FOLDERS =====================
-function selectFolder(folder, subtype) {
+function selectFolder(folder) {
   state.selectedFolder = folder;
-  state.selectedSubtype = subtype || null;
   renderFolderTree();
   renderDocumentsTable();
 }
@@ -1401,13 +1308,10 @@ function openMoveModal(doc) {
   document.getElementById('move-doc-title').textContent = 'Move Document';
   document.getElementById('move-doc-label').textContent = 'Move "' + doc.docNum + ' ' + doc.name + '" to:';
   const folders = [
-    { key: 'plans:architectural', label: 'Plans > Architectural' },
-    { key: 'plans:electrical', label: 'Plans > Electrical' },
-    { key: 'plans:plumbing', label: 'Plans > Plumbing' },
+    { key: 'plans', label: 'Plans' },
     { key: 'specs', label: 'Specs' },
     { key: 'addendas', label: 'Addendas' },
   ];
-  state.customSubtypes.forEach(cs => folders.push({ key: 'plans:' + cs.key, label: 'Plans > ' + cs.name }));
   state.customTypes.forEach(ct => folders.push({ key: ct.key, label: ct.name }));
   document.getElementById('move-doc-options').innerHTML = folders.map(f => `
     <label class="flex items-center gap-3 p-3 rounded border border-border-gray cursor-pointer hover:border-primary">
@@ -1424,14 +1328,10 @@ function confirmMoveDocument() {
   const dest = sel.value;
   const fs = state.folderStructure;
   removeDocFromCurrent(moveTarget);
-  if (dest.startsWith('plans:')) {
-    const sub = dest.split(':')[1];
-    if (!fs.plans.subtypes[sub]) fs.plans.subtypes[sub] = [];
-    moveTarget.folder = 'plans'; moveTarget.subtype = sub;
-    fs.plans.subtypes[sub].push(moveTarget);
-  } else if (dest === 'specs') { moveTarget.folder = 'specs'; delete moveTarget.subtype; fs.specs.push(moveTarget); }
-  else if (dest === 'addendas') { moveTarget.folder = 'addendas'; delete moveTarget.subtype; fs.addendas.push(moveTarget); }
-  else { const ct = state.customTypes.find(t => t.key === dest); if (ct) { moveTarget.folder = dest; delete moveTarget.subtype; ct.docs.push(moveTarget); } }
+  if (dest === 'plans') { moveTarget.folder = 'plans'; fs.plans.push(moveTarget); }
+  else if (dest === 'specs') { moveTarget.folder = 'specs'; fs.specs.push(moveTarget); }
+  else if (dest === 'addendas') { moveTarget.folder = 'addendas'; fs.addendas.push(moveTarget); }
+  else { const ct = state.customTypes.find(t => t.key === dest); if (ct) { moveTarget.folder = dest; ct.docs.push(moveTarget); } }
   closeModal('modal-move-document');
   moveTarget = null;
   renderFolderTree();
@@ -1441,7 +1341,7 @@ function confirmMoveDocument() {
 // ===================== SOFT DELETE =====================
 function softDeleteDocument(doc) {
   removeDocFromCurrent(doc);
-  doc.folder = 'deleted'; delete doc.subtype;
+  doc.folder = 'deleted';
   state.folderStructure.deleted.push(doc);
   renderFolderTree();
   renderDocumentsTable();
@@ -1451,7 +1351,7 @@ function softDeleteDocument(doc) {
 function duplicateDocument(doc) {
   const nd = { ...doc, id: 'd' + Date.now(), name: doc.name + ' (Copy)', page: getAllDocs().length + (state.folderStructure.deleted || []).length + 1 };
   const fs = state.folderStructure;
-  if (doc.folder === 'plans' && doc.subtype) { if (!fs.plans.subtypes[doc.subtype]) fs.plans.subtypes[doc.subtype] = []; fs.plans.subtypes[doc.subtype].push(nd); }
+  if (doc.folder === 'plans') fs.plans.push(nd);
   else if (doc.folder === 'specs') fs.specs.push(nd);
   else if (doc.folder === 'addendas') fs.addendas.push(nd);
   else { const ct = state.customTypes.find(t => t.key === doc.folder); if (ct) ct.docs.push(nd); }
@@ -1465,21 +1365,6 @@ function addDocumentType() {
   state.customTypes.push({ key: n.trim().toLowerCase().replace(/\s+/g,'-')+'-'+Date.now(), name: n.trim(), docs: [] });
   renderFolderTree();
 }
-function addPlanSubtype() {
-  document.getElementById('add-plan-type-input').value = '';
-  openModal('modal-add-plan-type');
-  setTimeout(() => document.getElementById('add-plan-type-input').focus(), 100);
-}
-function confirmAddPlanType() {
-  const n = document.getElementById('add-plan-type-input').value.trim();
-  if (!n) return;
-  const key = n.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now();
-  state.customSubtypes.push({ key, name: n });
-  if (state.folderStructure && state.folderStructure.plans) state.folderStructure.plans.subtypes[key] = [];
-  closeModal('modal-add-plan-type');
-  renderFolderTree();
-}
-
 // ===================== ADD DOCUMENTS =====================
 function simulateAddDocuments() {
   const folder = document.getElementById('add-doc-type').value;
@@ -1490,7 +1375,7 @@ function simulateAddDocuments() {
     { id: 'new'+Date.now(), page: np, docNum: 'NEW-01', name: 'Uploaded Document 1', folder },
     { id: 'new'+(Date.now()+1), page: np+1, docNum: 'NEW-02', name: 'Uploaded Document 2', folder },
   ];
-  if (folder === 'plans') { const s = Object.keys(fs.plans.subtypes)[0]||'architectural'; nds.forEach(d=>{d.subtype=s;fs.plans.subtypes[s].push(d)}); }
+  if (folder === 'plans') nds.forEach(d=>fs.plans.push(d));
   else if (folder === 'specs') nds.forEach(d=>fs.specs.push(d));
   else if (folder === 'addendas') nds.forEach(d=>fs.addendas.push(d));
   closeModal('modal-add-documents');
@@ -1510,7 +1395,7 @@ function enterReorderMode() { state.reorderMode = true; updateDocActionButtons()
 // #14: Save Order re-numbers page column sequentially
 function exitReorderMode(save) {
   if (save) {
-    const docs = getDocsForFolder(state.selectedFolder, state.selectedSubtype);
+    const docs = getDocsForFolder(state.selectedFolder);
     docs.forEach((d, i) => d.page = i + 1);
   }
   state.reorderMode = false;
@@ -1556,7 +1441,7 @@ function dropRow(e) {
   if (!tr || !dragId) return;
   const targetId = tr.dataset.docId;
   if (dragId === targetId) return;
-  const docs = getDocsForFolder(state.selectedFolder, state.selectedSubtype);
+  const docs = getDocsForFolder(state.selectedFolder);
   const fromIdx = docs.findIndex(d => d.id === dragId);
   let toIdx = docs.findIndex(d => d.id === targetId);
   if (fromIdx < 0 || toIdx < 0) return;
@@ -1570,14 +1455,14 @@ function dropRow(e) {
 }
 
 function moveRowUp(id) {
-  const docs = getDocsForFolder(state.selectedFolder, state.selectedSubtype);
+  const docs = getDocsForFolder(state.selectedFolder);
   const idx = docs.findIndex(d => d.id === id);
   if (idx <= 0) return;
   [docs[idx-1], docs[idx]] = [docs[idx], docs[idx-1]];
   renderDocumentsTable();
 }
 function moveRowDown(id) {
-  const docs = getDocsForFolder(state.selectedFolder, state.selectedSubtype);
+  const docs = getDocsForFolder(state.selectedFolder);
   const idx = docs.findIndex(d => d.id === id);
   if (idx < 0 || idx >= docs.length - 1) return;
   [docs[idx], docs[idx+1]] = [docs[idx+1], docs[idx]];
@@ -1681,12 +1566,12 @@ function createNewProject() {
   projects.unshift({ id: projects.length + 1, number, name, assigned, bidDate: 'Mar 2, 2026 - 9:00am', location, status: 'active', isNew: true });
   state.newProjectAdded = true;
   state.showAiBanner = true;
-  state.aiEnabled = document.getElementById('ai-autoname').checked;
+  state.aiEnabled = true;
   document.getElementById('new-project-name').value = '';
   document.getElementById('new-project-number').value = '';
   document.getElementById('new-project-location').value = '';
   document.getElementById('new-project-notes').value = '';
-  closeModal('modal-add-project-2');
+  closeBlueprintModal('modal-add-project-1');
   showScreen('projects');
   renderProjectsTable();
 }
