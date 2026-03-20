@@ -394,10 +394,10 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
     </div>
     <div class="flex items-end border-b-2 border-border-gray mb-8">
       <div class="flex gap-5 flex-1" id="status-tabs">
-        <div class="tab active" data-tab="active" onclick="switchTab(this, 'active')">Active <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold text-white ml-1" style="background:#0C79A8;padding:0 6px;" id="active-count">11</span></div>
-        <div class="tab" data-tab="archived" onclick="switchTab(this, 'archived')">Archived <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;">0</span></div>
-        <div class="tab" data-tab="won" onclick="switchTab(this, 'won')">Won Bids <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;">0</span></div>
-        <div class="tab" data-tab="lost" onclick="switchTab(this, 'lost')">Lost Bids <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;">0</span></div>
+        <div class="tab active" data-tab="active" onclick="switchTab(this, 'active')">Active <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold text-white ml-1" style="background:#0C79A8;padding:0 6px;" id="active-count">10</span></div>
+        <div class="tab" data-tab="archived" onclick="switchTab(this, 'archived')">Archived <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;" id="archived-count">10</span></div>
+        <div class="tab" data-tab="won" onclick="switchTab(this, 'won')">Won Bids <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;" id="won-count">7</span></div>
+        <div class="tab" data-tab="lost" onclick="switchTab(this, 'lost')">Lost Bids <span class="inline-flex items-center justify-center min-w-[24px] h-[18px] rounded-full text-xs font-semibold ml-1" style="background:#E7E6E5;color:#495565;padding:0 6px;" id="lost-count">4</span></div>
       </div>
       <button class="btn-link flex-shrink-0 mb-1" onclick="openModal('modal-add-status')" style="height:32px;font-size:13px">
         <i class="fa-solid fa-plus text-xs"></i> New Status
@@ -876,17 +876,42 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
 <script>
 // ===================== DATA =====================
 const projects = [
-  { id: 1, number: '2024-125', name: "Mario's Bistro Kitchen Renovation", assigned: 'Bill Murray', bidDate: 'Feb 15, 2025 - 10:00am', location: '789 Peachtree St, Atlanta, GA 30308', status: 'active' },
-  { id: 2, number: '2024-126', name: 'Mercy Hospital East Wing Expansion', assigned: 'Steve Martin', bidDate: 'Mar 10, 2025 - 11:30am', location: '123 Medical Dr, Atlanta, GA 30322', status: 'active' },
-  { id: 3, number: '2024-127', name: 'Oakwood Elementary School Renovation', assigned: 'Bill Murray', bidDate: 'Apr 5, 2025 - 1:00pm', location: '456 Oak Ave, Decatur, GA 30030', status: 'active' },
-  { id: 4, number: '2024-128', name: 'Riverside Office Complex Phase 2', assigned: 'Steve Martin', bidDate: 'May 20, 2025 - 2:30pm', location: '789 River Rd, Sandy Springs, GA 30328', status: 'active' },
-  { id: 5, number: '2024-129', name: 'Atlanta Airport Terminal B Expansion', assigned: 'Bill Murray', bidDate: 'Jun 15, 2025 - 9:00am', location: '6000 N Terminal Pkwy, Atlanta, GA 30320', status: 'active' },
-  { id: 6, number: '2024-130', name: 'Peachtree Plaza Hotel Remodel', assigned: 'Steve Martin', bidDate: 'Jul 30, 2025 - 3:45pm', location: '210 Peachtree St NW, Atlanta, GA 30303', status: 'active' },
-  { id: 7, number: '2024-131', name: 'Buckhead Mixed-Use Development', assigned: 'Bill Murray', bidDate: 'Aug 25, 2025 - 4:15pm', location: '3500 Lenox Rd, Atlanta, GA 30326', status: 'active' },
-  { id: 8, number: '2024-132', name: 'Midtown Fire Station #7', assigned: 'Steve Martin', bidDate: 'Sep 10, 2025 - 5:00pm', location: '875 W Peachtree St, Atlanta, GA 30309', status: 'active' },
-  { id: 9, number: '2024-133', name: 'Decatur Community Center Upgrade', assigned: 'Bill Murray', bidDate: 'Oct 20, 2025 - 6:30pm', location: '231 Sycamore St, Decatur, GA 30030', status: 'active' },
-  { id: 10, number: '2024-134', name: 'Sandy Springs Library Expansion', assigned: 'Steve Martin', bidDate: 'Nov 15, 2025 - 8:00am', location: '395 Mount Vernon Hwy, Sandy Springs, GA 30328', status: 'active' },
-  { id: 11, number: '2024-135', name: 'Kennesaw State Science Building', assigned: 'Bill Murray', bidDate: 'Dec 5, 2025 - 10:45am', location: '1000 Chastain Rd, Kennesaw, GA 30144', status: 'active' },
+  // Active - first 2 have NOT started takeoff
+  { id: 1, number: '2024-125', name: "Mario's Bistro Kitchen Renovation", assigned: 'Bill Murray', bidDate: 'Feb 15, 2025 - 10:00am', location: '789 Peachtree St, Atlanta, GA 30308', status: 'active', takeoffStarted: false },
+  { id: 2, number: '2024-126', name: 'Mercy Hospital East Wing Expansion', assigned: 'Steve Martin', bidDate: 'Mar 10, 2025 - 11:30am', location: '123 Medical Dr, Atlanta, GA 30322', status: 'active', takeoffStarted: false },
+  // Active - remaining 8 have takeoff started
+  { id: 3, number: '2024-127', name: 'Oakwood Elementary School Renovation', assigned: 'Bill Murray', bidDate: 'Apr 5, 2025 - 1:00pm', location: '456 Oak Ave, Decatur, GA 30030', status: 'active', takeoffStarted: true },
+  { id: 4, number: '2024-128', name: 'Riverside Office Complex Phase 2', assigned: 'Steve Martin', bidDate: 'May 20, 2025 - 2:30pm', location: '789 River Rd, Sandy Springs, GA 30328', status: 'active', takeoffStarted: true },
+  { id: 5, number: '2024-129', name: 'Atlanta Airport Terminal B Expansion', assigned: 'Bill Murray', bidDate: 'Jun 15, 2025 - 9:00am', location: '6000 N Terminal Pkwy, Atlanta, GA 30320', status: 'active', takeoffStarted: true },
+  { id: 6, number: '2024-130', name: 'Peachtree Plaza Hotel Remodel', assigned: 'Steve Martin', bidDate: 'Jul 30, 2025 - 3:45pm', location: '210 Peachtree St NW, Atlanta, GA 30303', status: 'active', takeoffStarted: true },
+  { id: 7, number: '2024-131', name: 'Buckhead Mixed-Use Development', assigned: 'Bill Murray', bidDate: 'Aug 25, 2025 - 4:15pm', location: '3500 Lenox Rd, Atlanta, GA 30326', status: 'active', takeoffStarted: true },
+  { id: 8, number: '2024-132', name: 'Midtown Fire Station #7', assigned: 'Steve Martin', bidDate: 'Sep 10, 2025 - 5:00pm', location: '875 W Peachtree St, Atlanta, GA 30309', status: 'active', takeoffStarted: true },
+  { id: 9, number: '2024-133', name: 'Decatur Community Center Upgrade', assigned: 'Bill Murray', bidDate: 'Oct 20, 2025 - 6:30pm', location: '231 Sycamore St, Decatur, GA 30030', status: 'active', takeoffStarted: true },
+  { id: 10, number: '2024-134', name: 'Sandy Springs Library Expansion', assigned: 'Steve Martin', bidDate: 'Nov 15, 2025 - 8:00am', location: '395 Mount Vernon Hwy, Sandy Springs, GA 30328', status: 'active', takeoffStarted: true },
+  // Archived - 10 projects
+  { id: 11, number: '2023-101', name: 'Grady Memorial Parking Deck', assigned: 'Bill Murray', bidDate: 'Jan 10, 2024 - 9:00am', location: '80 Jesse Hill Jr Dr, Atlanta, GA 30303', status: 'archived', takeoffStarted: true },
+  { id: 12, number: '2023-102', name: 'Emory Conference Center Addition', assigned: 'Steve Martin', bidDate: 'Feb 22, 2024 - 11:00am', location: '1615 Clifton Rd, Atlanta, GA 30329', status: 'archived', takeoffStarted: true },
+  { id: 13, number: '2023-103', name: 'Ponce City Market Tenant Buildout', assigned: 'Bill Murray', bidDate: 'Mar 18, 2024 - 2:00pm', location: '675 Ponce De Leon Ave, Atlanta, GA 30308', status: 'archived', takeoffStarted: true },
+  { id: 14, number: '2023-104', name: 'Georgia Tech Research Lab', assigned: 'Steve Martin', bidDate: 'Apr 30, 2024 - 10:30am', location: '275 North Ave NW, Atlanta, GA 30332', status: 'archived', takeoffStarted: true },
+  { id: 15, number: '2023-105', name: 'Roswell Street Retail Strip', assigned: 'Bill Murray', bidDate: 'May 15, 2024 - 3:00pm', location: '1045 Alpharetta St, Roswell, GA 30075', status: 'archived', takeoffStarted: false },
+  { id: 16, number: '2023-106', name: 'Dunwoody MARTA Station Renovation', assigned: 'Steve Martin', bidDate: 'Jun 28, 2024 - 1:30pm', location: '1500 Dunwoody Park, Dunwoody, GA 30338', status: 'archived', takeoffStarted: true },
+  { id: 17, number: '2023-107', name: 'Marietta Square Pavilion', assigned: 'Bill Murray', bidDate: 'Jul 20, 2024 - 4:00pm', location: '58 Park Square, Marietta, GA 30060', status: 'archived', takeoffStarted: true },
+  { id: 18, number: '2023-108', name: 'Brookhaven City Hall Expansion', assigned: 'Steve Martin', bidDate: 'Aug 12, 2024 - 9:30am', location: '4362 Peachtree Rd, Brookhaven, GA 30319', status: 'archived', takeoffStarted: true },
+  { id: 19, number: '2023-109', name: 'Johns Creek Fire Station #2', assigned: 'Bill Murray', bidDate: 'Sep 5, 2024 - 11:45am', location: '10900 Bell Rd, Johns Creek, GA 30097', status: 'archived', takeoffStarted: true },
+  { id: 20, number: '2023-110', name: 'Lawrenceville Civic Center', assigned: 'Steve Martin', bidDate: 'Oct 18, 2024 - 2:15pm', location: '225 Benson St, Lawrenceville, GA 30046', status: 'archived', takeoffStarted: true },
+  // Won - 7 projects
+  { id: 21, number: '2023-201', name: 'Piedmont Park Visitors Center', assigned: 'Bill Murray', bidDate: 'Nov 5, 2023 - 10:00am', location: '400 Park Dr NE, Atlanta, GA 30306', status: 'won', takeoffStarted: true },
+  { id: 22, number: '2023-202', name: 'Alpharetta City Center Phase 3', assigned: 'Steve Martin', bidDate: 'Dec 12, 2023 - 1:00pm', location: '2 Park Plaza, Alpharetta, GA 30009', status: 'won', takeoffStarted: true },
+  { id: 23, number: '2023-203', name: 'Tucker Recreation Center', assigned: 'Bill Murray', bidDate: 'Jan 20, 2024 - 3:30pm', location: '4898 Lavista Rd, Tucker, GA 30084', status: 'won', takeoffStarted: true },
+  { id: 24, number: '2024-204', name: 'Smyrna Market Village Renovation', assigned: 'Steve Martin', bidDate: 'Mar 8, 2024 - 9:00am', location: '1225 Concord Rd, Smyrna, GA 30080', status: 'won', takeoffStarted: true },
+  { id: 25, number: '2024-205', name: 'Woodstock Library Branch', assigned: 'Bill Murray', bidDate: 'Apr 14, 2024 - 11:00am', location: '120 Arnold Mill Rd, Woodstock, GA 30188', status: 'won', takeoffStarted: true },
+  { id: 26, number: '2024-206', name: 'Peachtree Corners Town Center', assigned: 'Steve Martin', bidDate: 'Jun 1, 2024 - 2:00pm', location: '5200 Town Center Blvd, Peachtree Corners, GA 30092', status: 'won', takeoffStarted: true },
+  { id: 27, number: '2024-207', name: 'Kennesaw Mountain Trail Center', assigned: 'Bill Murray', bidDate: 'Jul 22, 2024 - 4:00pm', location: '900 Kennesaw Mountain Dr, Kennesaw, GA 30152', status: 'won', takeoffStarted: true },
+  // Lost - 4 projects
+  { id: 28, number: '2023-301', name: 'Buckhead Tower Lobby Remodel', assigned: 'Steve Martin', bidDate: 'Aug 15, 2023 - 10:00am', location: '3424 Peachtree Rd NE, Atlanta, GA 30326', status: 'lost', takeoffStarted: true },
+  { id: 29, number: '2023-302', name: 'Vinings Mixed-Use Development', assigned: 'Bill Murray', bidDate: 'Oct 3, 2023 - 1:30pm', location: '4300 Paces Ferry Rd, Vinings, GA 30339', status: 'lost', takeoffStarted: true },
+  { id: 30, number: '2024-303', name: 'Chamblee Transit-Oriented Lofts', assigned: 'Steve Martin', bidDate: 'Jan 25, 2024 - 3:00pm', location: '5150 Peachtree Blvd, Chamblee, GA 30341', status: 'lost', takeoffStarted: true },
+  { id: 31, number: '2024-304', name: 'East Point Cultural Arts Center', assigned: 'Bill Murray', bidDate: 'May 10, 2024 - 11:30am', location: '2757 Main St, East Point, GA 30344', status: 'lost', takeoffStarted: true },
 ];
 
 function makeAIDocs() {
@@ -1021,6 +1046,9 @@ function renderProjectsTable() {
   const tbody = document.getElementById('projects-tbody');
   const filtered = projects.filter(p => p.status === state.activeTab);
   document.getElementById('active-count').textContent = projects.filter(p => p.status === 'active').length;
+  document.getElementById('archived-count').textContent = projects.filter(p => p.status === 'archived').length;
+  document.getElementById('won-count').textContent = projects.filter(p => p.status === 'won').length;
+  document.getElementById('lost-count').textContent = projects.filter(p => p.status === 'lost').length;
   if (filtered.length === 0) {
     tbody.innerHTML = '<tr><td colspan="6" class="text-center py-16 text-muted text-lg">No projects in this category</td></tr>';
     return;
@@ -1131,6 +1159,7 @@ function navigateToDocuments(projectId) {
   state.aiEnabled = true;
   state.selectedFolder = 'plans';
   state.selectedSubtype = null;
+  state.takeoffStarted = proj.takeoffStarted || false;
   state.reorderMode = false;
   state.folderStructure = makeAIDocs();
   state.noAIDocs = makeNoAIDocs(22);
@@ -1147,6 +1176,7 @@ function navigateToDocuments(projectId) {
 function goToTakeoff() {
   if (!state.selectedProject) { showScreen('takeoff-no-project'); return; }
   state.takeoffStarted = true;
+  state.selectedProject.takeoffStarted = true;
   const proj = state.selectedProject;
   document.getElementById('takeoff-project-name').textContent = proj.name;
   const docs = getAllDocs();
