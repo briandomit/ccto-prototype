@@ -474,9 +474,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
         <span class="text-2xl font-medium text-black whitespace-nowrap" id="doc-project-title"></span>
         <span class="text-sm font-normal text-secondary-text truncate" id="doc-project-subtitle"></span>
       </div>
-      <button class="btn-primary flex-shrink-0" id="btn-takeoff-doc" onclick="goToTakeoff()">
-        <i class="fa-solid fa-rocket text-sm"></i> Takeoff
-      </button>
+      <button class="btn-primary flex-shrink-0" id="btn-takeoff-doc" onclick="goToTakeoff()">Start Takeoff</button>
     </div>
 
     <!-- Document table -->
@@ -873,23 +871,31 @@ const projects = [
 
 function makeAIDocs() {
   return {
-    plans: [
-      { id: 'd1', page: 1, docNum: 'A01', name: 'Lobby & Entrance Floor Plan', folder: 'plans' },
-      { id: 'd2', page: 2, docNum: 'A02', name: 'Main Dining Room Layout', folder: 'plans' },
-      { id: 'd3', page: 3, docNum: 'A03', name: 'Kitchen Floor Plan', folder: 'plans' },
-      { id: 'd4', page: 4, docNum: 'A04', name: 'Bar Area Layout', folder: 'plans' },
-      { id: 'd5', page: 5, docNum: 'A05', name: 'Restroom Floor Plans', folder: 'plans' },
-      { id: 'd6', page: 6, docNum: 'A06', name: 'Office & Storage Areas', folder: 'plans' },
-      { id: 'd7', page: 7, docNum: 'A07', name: 'Outdoor Patio Plan', folder: 'plans' },
-      { id: 'd8', page: 8, docNum: 'E01', name: 'Main Electrical Panel Schedule', folder: 'plans' },
-      { id: 'd9', page: 9, docNum: 'E02', name: 'Kitchen Electrical Layout', folder: 'plans' },
-      { id: 'd10', page: 10, docNum: 'E03', name: 'Dining Room Lighting Plan', folder: 'plans' },
-      { id: 'd11', page: 11, docNum: 'E04', name: 'Emergency Lighting & Exit Signs', folder: 'plans' },
-      { id: 'd12', page: 12, docNum: 'P01', name: 'Kitchen Plumbing Layout', folder: 'plans' },
-      { id: 'd13', page: 13, docNum: 'P02', name: 'Restroom Plumbing Plan', folder: 'plans' },
-      { id: 'd14', page: 14, docNum: 'P03', name: 'Bar Area Plumbing', folder: 'plans' },
-      { id: 'd15', page: 15, docNum: 'P04', name: 'Gas Line Routing', folder: 'plans' },
-    ],
+    plans: {
+      subtypes: {
+        architectural: [
+          { id: 'd1', page: 1, docNum: 'A01', name: 'Lobby & Entrance Floor Plan', folder: 'plans', subtype: 'architectural' },
+          { id: 'd2', page: 2, docNum: 'A02', name: 'Main Dining Room Layout', folder: 'plans', subtype: 'architectural' },
+          { id: 'd3', page: 3, docNum: 'A03', name: 'Kitchen Floor Plan', folder: 'plans', subtype: 'architectural' },
+          { id: 'd4', page: 4, docNum: 'A04', name: 'Bar Area Layout', folder: 'plans', subtype: 'architectural' },
+          { id: 'd5', page: 5, docNum: 'A05', name: 'Restroom Floor Plans', folder: 'plans', subtype: 'architectural' },
+          { id: 'd6', page: 6, docNum: 'A06', name: 'Office & Storage Areas', folder: 'plans', subtype: 'architectural' },
+          { id: 'd7', page: 7, docNum: 'A07', name: 'Outdoor Patio Plan', folder: 'plans', subtype: 'architectural' },
+        ],
+        electrical: [
+          { id: 'd8', page: 8, docNum: 'E01', name: 'Main Electrical Panel Schedule', folder: 'plans', subtype: 'electrical' },
+          { id: 'd9', page: 9, docNum: 'E02', name: 'Kitchen Electrical Layout', folder: 'plans', subtype: 'electrical' },
+          { id: 'd10', page: 10, docNum: 'E03', name: 'Dining Room Lighting Plan', folder: 'plans', subtype: 'electrical' },
+          { id: 'd11', page: 11, docNum: 'E04', name: 'Emergency Lighting & Exit Signs', folder: 'plans', subtype: 'electrical' },
+        ],
+        plumbing: [
+          { id: 'd12', page: 12, docNum: 'P01', name: 'Kitchen Plumbing Layout', folder: 'plans', subtype: 'plumbing' },
+          { id: 'd13', page: 13, docNum: 'P02', name: 'Restroom Plumbing Plan', folder: 'plans', subtype: 'plumbing' },
+          { id: 'd14', page: 14, docNum: 'P03', name: 'Bar Area Plumbing', folder: 'plans', subtype: 'plumbing' },
+          { id: 'd15', page: 15, docNum: 'P04', name: 'Gas Line Routing', folder: 'plans', subtype: 'plumbing' },
+        ],
+      }
+    },
     specs: [
       { id: 'd16', page: 16, docNum: 'SP01', name: 'Kitchen Equipment Specifications', folder: 'specs' },
       { id: 'd17', page: 17, docNum: 'SP02', name: 'HVAC System Specifications', folder: 'specs' },
@@ -923,10 +929,13 @@ let state = {
   selectedFolder: 'all',
   newProjectAdded: false,
   showAiBanner: false,
+  takeoffStarted: false,
   contextMenuTarget: null,
+  selectedSubtype: null,
   folderStructure: null,
   noAIDocs: null,
   customTypes: [],
+  customSubtypes: [],
 };
 
 // ===================== HELPERS =====================
@@ -935,21 +944,28 @@ function getAllDocs() {
   const fs = state.folderStructure;
   if (!fs) return [];
   let all = [];
-  all = all.concat(fs.plans || []);
+  if (fs.plans && fs.plans.subtypes) {
+    for (const st of Object.keys(fs.plans.subtypes)) all = all.concat(fs.plans.subtypes[st]);
+  }
   all = all.concat(fs.specs || []);
   all = all.concat(fs.addendas || []);
   for (const ct of state.customTypes) all = all.concat(ct.docs || []);
   return all;
 }
 
-function getDocsForFolder(folderKey) {
+function getDocsForFolder(folderKey, subtypeKey) {
   const fs = state.folderStructure;
   if (!fs) return [];
   if (folderKey === 'all') return getAllDocs();
   if (folderKey === 'archive') return fs.archive || [];
   if (folderKey === 'specs') return fs.specs || [];
   if (folderKey === 'addendas') return fs.addendas || [];
-  if (folderKey === 'plans') return fs.plans || [];
+  if (folderKey === 'plans' && !subtypeKey) {
+    let all = [];
+    if (fs.plans && fs.plans.subtypes) { for (const st of Object.keys(fs.plans.subtypes)) all = all.concat(fs.plans.subtypes[st]); }
+    return all;
+  }
+  if (folderKey === 'plans' && subtypeKey) return (fs.plans && fs.plans.subtypes && fs.plans.subtypes[subtypeKey]) || [];
   const ct = state.customTypes.find(t => t.key === folderKey);
   if (ct) return ct.docs || [];
   return [];
@@ -958,8 +974,10 @@ function getDocsForFolder(folderKey) {
 function findDocById(id) {
   const fs = state.folderStructure;
   if (!fs) return null;
-  let f = (fs.plans || []).find(d => d.id === id); if (f) return f;
-  f = (fs.specs || []).find(d => d.id === id); if (f) return f;
+  if (fs.plans && fs.plans.subtypes) {
+    for (const st of Object.keys(fs.plans.subtypes)) { const f = fs.plans.subtypes[st].find(d => d.id === id); if (f) return f; }
+  }
+  let f = (fs.specs || []).find(d => d.id === id); if (f) return f;
   f = (fs.addendas || []).find(d => d.id === id); if (f) return f;
   f = (fs.archive || []).find(d => d.id === id); if (f) return f;
   for (const ct of state.customTypes) { f = (ct.docs || []).find(d => d.id === id); if (f) return f; }
@@ -969,8 +987,10 @@ function findDocById(id) {
 
 function removeDocFromCurrent(doc) {
   const fs = state.folderStructure;
-  let i = (fs.plans || []).indexOf(doc); if (i >= 0) { fs.plans.splice(i, 1); return; }
-  i = (fs.specs || []).indexOf(doc); if (i >= 0) { fs.specs.splice(i, 1); return; }
+  if (fs.plans && fs.plans.subtypes) {
+    for (const st of Object.keys(fs.plans.subtypes)) { const i = fs.plans.subtypes[st].indexOf(doc); if (i >= 0) { fs.plans.subtypes[st].splice(i, 1); return; } }
+  }
+  let i = (fs.specs || []).indexOf(doc); if (i >= 0) { fs.specs.splice(i, 1); return; }
   i = (fs.addendas || []).indexOf(doc); if (i >= 0) { fs.addendas.splice(i, 1); return; }
   i = (fs.archive || []).indexOf(doc); if (i >= 0) { fs.archive.splice(i, 1); return; }
   for (const ct of state.customTypes) { i = (ct.docs || []).indexOf(doc); if (i >= 0) { ct.docs.splice(i, 1); return; } }
@@ -1010,7 +1030,16 @@ function renderFolderTree() {
   }
   const fs = state.folderStructure;
   let html = '';
-  html += `<div class="folder-item ${state.selectedFolder==='plans'?'selected':''}" onclick="selectFolder('plans')">Plans</div>`;
+  html += `<div class="folder-item ${state.selectedFolder==='plans'&&!state.selectedSubtype?'selected':''}" onclick="selectFolder('plans')">Plans</div>`;
+  if (fs && fs.plans && fs.plans.subtypes) {
+    for (const st of Object.keys(fs.plans.subtypes)) {
+      const label = st.charAt(0).toUpperCase() + st.slice(1);
+      html += `<div class="folder-item sub ${state.selectedFolder==='plans'&&state.selectedSubtype===st?'selected':''}" onclick="selectFolder('plans','${st}')">${label}</div>`;
+    }
+  }
+  for (const cst of state.customSubtypes) {
+    html += `<div class="folder-item sub ${state.selectedFolder==='plans'&&state.selectedSubtype===cst.key?'selected':''}" onclick="selectFolder('plans','${cst.key}')">${cst.name}</div>`;
+  }
   html += `<div class="folder-item ${state.selectedFolder==='specs'?'selected':''}" onclick="selectFolder('specs')">Specs</div>`;
   html += `<div class="folder-item ${state.selectedFolder==='addendas'?'selected':''}" onclick="selectFolder('addendas')">Addendas</div>`;
   for (const ct of state.customTypes) {
@@ -1027,7 +1056,7 @@ function renderDocumentsTable() {
   if (!state.aiEnabled) {
     docs = (state.selectedFolder === 'archive') ? (state.folderStructure ? state.folderStructure.archive : []) : (state.noAIDocs || []);
   } else {
-    docs = getDocsForFolder(state.selectedFolder);
+    docs = getDocsForFolder(state.selectedFolder, state.selectedSubtype);
   }
   const sortIcons = document.querySelectorAll('.sort-icon');
   sortIcons.forEach(el => { el.style.opacity = state.reorderMode ? '0.3' : '1'; el.style.pointerEvents = state.reorderMode ? 'none' : 'auto'; });
@@ -1049,7 +1078,7 @@ function renderDocumentsTable() {
                <button class="text-muted hover:text-body-dark bg-transparent border-none cursor-pointer text-xs p-1" onclick="event.stopPropagation();moveRowDown('${d.id}')"><i class="fa-solid fa-chevron-down"></i></button>
              </div>`
           : `<div class="inline-actions flex items-center justify-end gap-4">
-               <a href="#" class="text-muted hover:text-primary" title="View" onclick="event.preventDefault();event.stopPropagation();openDocumentViewer(findDocById('${d.id}'))"><i class="fa-solid fa-eye"></i></a>
+               <a href="#" class="text-muted hover:text-primary" title="View Document" onclick="event.preventDefault();event.stopPropagation();openDocumentViewer(findDocById('${d.id}'))"><i class="fa-solid fa-file-pdf"></i></a>
                <a href="#" class="text-muted hover:text-primary" title="Rename" onclick="event.preventDefault();event.stopPropagation();openRenameModal(findDocById('${d.id}'))"><i class="fa-solid fa-pen"></i></a>
                <a href="#" class="text-muted hover:text-primary" title="Duplicate" onclick="event.preventDefault();event.stopPropagation();duplicateDocument(findDocById('${d.id}'))"><i class="fa-regular fa-copy"></i></a>
                <a href="#" class="text-muted hover:text-primary" title="Move" onclick="event.preventDefault();event.stopPropagation();openMoveModal(findDocById('${d.id}'))"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
@@ -1080,6 +1109,7 @@ function navigateToDocuments(projectId) {
   state.selectedProject = proj;
   state.aiEnabled = true;
   state.selectedFolder = 'plans';
+  state.selectedSubtype = null;
   state.reorderMode = false;
   state.folderStructure = makeAIDocs();
   state.noAIDocs = makeNoAIDocs(22);
@@ -1095,6 +1125,7 @@ function navigateToDocuments(projectId) {
 
 function goToTakeoff() {
   if (!state.selectedProject) { showScreen('takeoff-no-project'); return; }
+  state.takeoffStarted = true;
   const proj = state.selectedProject;
   document.getElementById('takeoff-project-name').textContent = proj.name;
   const docs = getAllDocs();
@@ -1132,8 +1163,9 @@ function switchTab(el, tab) {
 }
 
 // ===================== FOLDERS =====================
-function selectFolder(folder) {
+function selectFolder(folder, subtype) {
   state.selectedFolder = folder;
+  state.selectedSubtype = subtype || null;
   renderFolderTree();
   renderDocumentsTable();
 }
@@ -1308,11 +1340,14 @@ function openMoveModal(doc) {
   moveTarget = doc;
   document.getElementById('move-doc-title').textContent = 'Move Document';
   document.getElementById('move-doc-label').textContent = 'Move "' + doc.docNum + ' ' + doc.name + '" to:';
-  const folders = [
-    { key: 'plans', label: 'Plans' },
-    { key: 'specs', label: 'Specs' },
-    { key: 'addendas', label: 'Addendas' },
-  ];
+  const folders = [];
+  if (state.folderStructure && state.folderStructure.plans && state.folderStructure.plans.subtypes) {
+    for (const st of Object.keys(state.folderStructure.plans.subtypes)) {
+      folders.push({ key: 'plans:' + st, label: 'Plans / ' + st.charAt(0).toUpperCase() + st.slice(1) });
+    }
+  }
+  folders.push({ key: 'specs', label: 'Specs' });
+  folders.push({ key: 'addendas', label: 'Addendas' });
   state.customTypes.forEach(ct => folders.push({ key: ct.key, label: ct.name }));
   document.getElementById('move-doc-options').innerHTML = folders.map(f => `
     <label class="flex items-center gap-3 p-3 rounded border border-border-gray cursor-pointer hover:border-primary">
@@ -1329,10 +1364,14 @@ function confirmMoveDocument() {
   const dest = sel.value;
   const fs = state.folderStructure;
   removeDocFromCurrent(moveTarget);
-  if (dest === 'plans') { moveTarget.folder = 'plans'; fs.plans.push(moveTarget); }
-  else if (dest === 'specs') { moveTarget.folder = 'specs'; fs.specs.push(moveTarget); }
-  else if (dest === 'addendas') { moveTarget.folder = 'addendas'; fs.addendas.push(moveTarget); }
-  else { const ct = state.customTypes.find(t => t.key === dest); if (ct) { moveTarget.folder = dest; ct.docs.push(moveTarget); } }
+  if (dest.startsWith('plans:')) {
+    const sub = dest.split(':')[1];
+    if (!fs.plans.subtypes[sub]) fs.plans.subtypes[sub] = [];
+    moveTarget.folder = 'plans'; moveTarget.subtype = sub;
+    fs.plans.subtypes[sub].push(moveTarget);
+  } else if (dest === 'specs') { moveTarget.folder = 'specs'; delete moveTarget.subtype; fs.specs.push(moveTarget); }
+  else if (dest === 'addendas') { moveTarget.folder = 'addendas'; delete moveTarget.subtype; fs.addendas.push(moveTarget); }
+  else { const ct = state.customTypes.find(t => t.key === dest); if (ct) { moveTarget.folder = dest; delete moveTarget.subtype; ct.docs.push(moveTarget); } }
   closeModal('modal-move-document');
   moveTarget = null;
   renderFolderTree();
@@ -1342,7 +1381,7 @@ function confirmMoveDocument() {
 // ===================== ARCHIVE =====================
 function archiveDocument(doc) {
   removeDocFromCurrent(doc);
-  doc.folder = 'archive';
+  doc.folder = 'archive'; delete doc.subtype;
   state.folderStructure.archive.push(doc);
   renderFolderTree();
   renderDocumentsTable();
@@ -1352,7 +1391,7 @@ function archiveDocument(doc) {
 function duplicateDocument(doc) {
   const nd = { ...doc, id: 'd' + Date.now(), name: doc.name + ' (Copy)', page: getAllDocs().length + (state.folderStructure.archive || []).length + 1 };
   const fs = state.folderStructure;
-  if (doc.folder === 'plans') fs.plans.push(nd);
+  if (doc.folder === 'plans' && doc.subtype) { if (!fs.plans.subtypes[doc.subtype]) fs.plans.subtypes[doc.subtype] = []; fs.plans.subtypes[doc.subtype].push(nd); }
   else if (doc.folder === 'specs') fs.specs.push(nd);
   else if (doc.folder === 'addendas') fs.addendas.push(nd);
   else { const ct = state.customTypes.find(t => t.key === doc.folder); if (ct) ct.docs.push(nd); }
@@ -1376,7 +1415,7 @@ function simulateAddDocuments() {
     { id: 'new'+Date.now(), page: np, docNum: 'NEW-01', name: 'Uploaded Document 1', folder },
     { id: 'new'+(Date.now()+1), page: np+1, docNum: 'NEW-02', name: 'Uploaded Document 2', folder },
   ];
-  if (folder === 'plans') nds.forEach(d=>fs.plans.push(d));
+  if (folder === 'plans') { const s = Object.keys(fs.plans.subtypes)[0]||'architectural'; nds.forEach(d=>{d.subtype=s;fs.plans.subtypes[s].push(d)}); }
   else if (folder === 'specs') nds.forEach(d=>fs.specs.push(d));
   else if (folder === 'addendas') nds.forEach(d=>fs.addendas.push(d));
   closeModal('modal-add-documents');
@@ -1390,13 +1429,14 @@ function updateDocActionButtons() {
   const tb = document.getElementById('btn-takeoff-doc');
   if (state.reorderMode) { ab.style.display='none'; rb.style.display='inline-flex'; tb.disabled=true; }
   else { ab.style.display='inline-flex'; rb.style.display='none'; tb.disabled=false; }
+  tb.textContent = state.takeoffStarted ? 'View Takeoff' : 'Start Takeoff';
 }
 function enterReorderMode() { state.reorderMode = true; updateDocActionButtons(); renderDocumentsTable(); }
 
 // #14: Save Order re-numbers page column sequentially
 function exitReorderMode(save) {
   if (save) {
-    const docs = getDocsForFolder(state.selectedFolder);
+    const docs = getDocsForFolder(state.selectedFolder, state.selectedSubtype);
     docs.forEach((d, i) => d.page = i + 1);
   }
   state.reorderMode = false;
@@ -1442,7 +1482,7 @@ function dropRow(e) {
   if (!tr || !dragId) return;
   const targetId = tr.dataset.docId;
   if (dragId === targetId) return;
-  const docs = getDocsForFolder(state.selectedFolder);
+  const docs = getDocsForFolder(state.selectedFolder, state.selectedSubtype);
   const fromIdx = docs.findIndex(d => d.id === dragId);
   let toIdx = docs.findIndex(d => d.id === targetId);
   if (fromIdx < 0 || toIdx < 0) return;
@@ -1456,14 +1496,14 @@ function dropRow(e) {
 }
 
 function moveRowUp(id) {
-  const docs = getDocsForFolder(state.selectedFolder);
+  const docs = getDocsForFolder(state.selectedFolder, state.selectedSubtype);
   const idx = docs.findIndex(d => d.id === id);
   if (idx <= 0) return;
   [docs[idx-1], docs[idx]] = [docs[idx], docs[idx-1]];
   renderDocumentsTable();
 }
 function moveRowDown(id) {
-  const docs = getDocsForFolder(state.selectedFolder);
+  const docs = getDocsForFolder(state.selectedFolder, state.selectedSubtype);
   const idx = docs.findIndex(d => d.id === id);
   if (idx < 0 || idx >= docs.length - 1) return;
   [docs[idx], docs[idx+1]] = [docs[idx+1], docs[idx]];
