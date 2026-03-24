@@ -652,11 +652,12 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
     </div>
 
     <!-- Estimating Cost Panel (overlays canvas) -->
-    <div class="flex flex-col bg-white shrink-0" id="estimating-panel" style="position:absolute;top:0;right:0;width:380px;height:100%;border-left:1px solid #DAD8D7;z-index:20">
-    <!-- Tab bar -->
-    <div class="flex items-center" style="border-bottom:1px solid var(--neutral-300)">
-      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:400;color:var(--neutral-500)" id="cost-tab-catalog" onclick="switchCostTab('catalog')">Catalog</div>
-      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:700;color:var(--neutral-600);border-bottom:3px solid var(--primary-500)" id="cost-tab-cost" onclick="switchCostTab('cost')">Cost</div>
+    <div class="flex flex-col bg-white shrink-0" id="estimating-panel" style="display:none;position:absolute;top:0;right:0;width:380px;height:100%;border-left:1px solid var(--neutral-300);z-index:20">
+
+    <!-- Tab bar (hidden in empty state, shown via JS) -->
+    <div id="ep-tab-bar" class="flex items-center" style="border-bottom:1px solid var(--neutral-300)">
+      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:700;color:var(--neutral-600);border-bottom:3px solid var(--primary-500)" id="cost-tab-catalog" onclick="switchCostTab('catalog')">Catalog</div>
+      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:400;color:var(--neutral-500)" id="cost-tab-cost" onclick="switchCostTab('cost')">Cost</div>
       <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:400;color:var(--neutral-500)" id="cost-tab-summary" onclick="switchCostTab('summary')">Summary</div>
       <div class="flex items-center gap-1 flex-shrink-0" style="padding:0 8px">
         <button class="w-[26px] h-[26px] rounded flex items-center justify-center text-xs hover:bg-gray-100 border-none bg-transparent cursor-pointer" style="color:var(--neutral-400)" title="Open in new tab"><i class="fa-solid fa-up-right-from-square"></i></button>
@@ -664,230 +665,106 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
       </div>
     </div>
 
-    <!-- TAB 1: CATALOG -->
-    <div id="cost-content-catalog" style="display:none" class="flex-1 flex flex-col overflow-hidden">
-      <div style="padding:16px 16px 8px">
-        <div style="position:relative">
-          <i class="fa-solid fa-magnifying-glass" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--neutral-400);font-size:13px"></i>
-          <input type="text" placeholder="Search assemblies..." style="width:100%;height:36px;border:1px solid var(--neutral-300);border-radius:6px;padding:0 12px 0 32px;font-family:'Montserrat',sans-serif;font-size:13px;color:var(--neutral-600);outline:none;background:var(--neutral-0,#fff)">
-        </div>
+    <!-- STATE 1: EMPTY STATE -->
+    <div id="ep-empty-state" class="flex-1 flex flex-col items-center justify-center" style="display:none;padding:32px">
+      <div style="width:64px;height:64px;border-radius:50%;background:var(--neutral-100);display:flex;align-items:center;justify-content:center;margin-bottom:24px">
+        <i class="fa-solid fa-calculator" style="font-size:24px;color:var(--neutral-400)"></i>
       </div>
-      <div style="padding:0 16px 8px;display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid var(--neutral-300);margin:0 16px">
-        <button style="flex:1;padding:6px 0;font-size:12px;font-weight:600;font-family:'Montserrat',sans-serif;border:none;cursor:pointer;background:var(--primary-500);color:#fff">Assemblies</button>
-        <button style="flex:1;padding:6px 0;font-size:12px;font-weight:600;font-family:'Montserrat',sans-serif;border:none;cursor:pointer;background:#fff;color:var(--neutral-600)">Items</button>
-      </div>
-      <div style="padding:8px 16px;display:flex;gap:6px;flex-wrap:wrap">
-        <span style="padding:4px 12px;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;background:var(--primary-500);color:#fff">All</span>
-        <span style="padding:4px 12px;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;background:var(--neutral-200);color:var(--neutral-600)">Drywall</span>
-        <span style="padding:4px 12px;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;background:var(--neutral-200);color:var(--neutral-600)">ACT</span>
-        <span style="padding:4px 12px;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;background:var(--neutral-200);color:var(--neutral-600)">Painting</span>
-        <span style="padding:4px 12px;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;background:var(--neutral-200);color:var(--neutral-600)">Flooring</span>
-      </div>
-      <div class="flex-1 overflow-y-auto" style="padding:0 16px">
-        <div style="border-bottom:1px solid var(--neutral-200);padding:12px 0">
-          <div style="font-size:14px;font-weight:600;color:var(--neutral-600)">Wall Type Q2 — Metal Stud + Drywall</div>
-          <div style="font-size:12px;color:var(--neutral-500);margin-top:2px">4 parts · <span style="color:var(--primary-500)">Drywall</span></div>
-        </div>
-        <div style="border-bottom:1px solid var(--neutral-200);padding:12px 0">
-          <div style="font-size:14px;font-weight:600;color:var(--neutral-600)">Wall Type B3 — Single Layer DW</div>
-          <div style="font-size:12px;color:var(--neutral-500);margin-top:2px">3 parts · <span style="color:var(--primary-500)">Drywall</span></div>
-        </div>
-        <div style="border-bottom:1px solid var(--neutral-200);padding:12px 0">
-          <div style="font-size:14px;font-weight:600;color:var(--neutral-600)">ACT 1 — 24×24 Grid + Tile</div>
-          <div style="font-size:12px;color:var(--neutral-500);margin-top:2px">5 parts · <span style="color:var(--primary-500)">ACT</span></div>
-        </div>
-        <div style="border-bottom:1px solid var(--neutral-200);padding:12px 0">
-          <div style="font-size:14px;font-weight:600;color:var(--neutral-600)">LVP Flooring — 6mm Click-Lock</div>
-          <div style="font-size:12px;color:var(--neutral-500);margin-top:2px">2 parts · <span style="color:var(--primary-500)">Flooring</span></div>
-        </div>
-        <div style="border-bottom:1px solid var(--neutral-200);padding:12px 0">
-          <div style="font-size:14px;font-weight:600;color:var(--neutral-600)">Interior Paint — 2 Coat Eggshell</div>
-          <div style="font-size:12px;color:var(--neutral-500);margin-top:2px">3 parts · <span style="color:var(--primary-500)">Painting</span></div>
-        </div>
-        <div style="border-bottom:1px solid var(--neutral-200);padding:12px 0">
-          <div style="font-size:14px;font-weight:600;color:var(--neutral-600)">DW Ceiling — Standard Hang + Finish</div>
-          <div style="font-size:12px;color:var(--neutral-500);margin-top:2px">3 parts · <span style="color:var(--primary-500)">Drywall</span></div>
-        </div>
-      </div>
-      <div style="padding:12px 16px;flex-shrink:0">
-        <button class="btn-link" style="padding:0;height:auto;font-size:13px">+ Add Assembly</button>
-      </div>
+      <h3 style="font-size:16px;font-weight:700;color:var(--neutral-600);margin:0 0 8px;text-align:center">No measurements yet</h3>
+      <p style="font-size:13px;color:var(--neutral-500);text-align:center;max-width:260px;line-height:1.5;margin:0 0 24px">Draw measurements on the plan to start estimating costs for this page.</p>
+      <button class="btn-secondary" style="font-size:13px" onclick="toggleEstimatingPanel()">Close Panel</button>
     </div>
 
-    <!-- TAB 2: COST (per-page line items) -->
-    <div id="cost-content-cost" class="flex-1 flex flex-col overflow-hidden">
-      <div class="flex-1 overflow-y-auto" style="padding:0 16px">
+    <!-- STATE 2: UNPRICED MEASUREMENTS -->
+    <div id="ep-unpriced" style="display:none" class="flex-1 overflow-y-auto"></div>
 
-        <!-- Condition 1 -->
-        <div style="padding:16px 0 8px;display:flex;align-items:baseline;gap:8px">
-          <span style="font-size:14px;font-weight:700;color:var(--neutral-600)">Wall Type Q2 @ 13'</span>
-          <span style="font-size:10px;font-weight:500;color:var(--neutral-400)">42.5 LF × 9 ft</span>
-        </div>
-        <div style="padding:8px 0 4px">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:6px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--neutral-500);background:var(--neutral-200);padding:2px 6px;border-radius:3px">MAT</span><span style="font-size:13px;font-weight:500;color:var(--neutral-600)">Metal Studs 3-5/8" 25ga</span></div>
-            <span style="font-size:14px;font-weight:600;color:var(--neutral-600)">$1,947.88</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-            <div style="display:flex;align-items:center;gap:4px"><span style="font-size:12px;color:var(--neutral-500)">401.6 SF</span><span style="font-size:10px;color:var(--neutral-400);cursor:help" title="382.5 SF net + 5% waste = 401.6 SF">ⓘ</span></div>
-            <input type="number" step="0.01" value="4.85" placeholder="0.00" style="width:60px;height:28px;border:1px solid var(--neutral-300);border-radius:4px;padding:0 6px;font-family:'Montserrat',sans-serif;font-size:12px;text-align:right;color:var(--neutral-600);outline:none">
-          </div>
-        </div>
-        <div style="padding:4px 0 8px">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:6px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--neutral-400);background:var(--neutral-100);padding:2px 6px;border-radius:3px">LAB</span><span style="font-size:13px;font-weight:500;color:var(--neutral-600)">Metal Stud Framing — Labor</span></div>
-            <span style="font-size:14px;font-weight:600;color:var(--neutral-600)">$489.60</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-            <div style="display:flex;align-items:center;gap:4px"><span style="font-size:12px;color:var(--neutral-500)">382.5 SF</span><span style="font-size:10px;color:var(--neutral-400);cursor:help" title="382.5 SF net">ⓘ</span></div>
-            <input type="number" step="0.01" value="1.28" placeholder="0.00" style="width:60px;height:28px;border:1px solid var(--neutral-300);border-radius:4px;padding:0 6px;font-family:'Montserrat',sans-serif;font-size:12px;text-align:right;color:var(--neutral-600);outline:none">
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 16px;margin-top:4px">
-          <div style="display:flex;gap:16px">
-            <button class="btn-link" style="padding:0;height:auto;font-size:12px">+ Material</button>
-            <button class="btn-link" style="padding:0;height:auto;font-size:12px">+ Labor</button>
-          </div>
-          <span style="font-size:13px;font-weight:700;color:var(--neutral-600)">$2,437.48</span>
-        </div>
+    <!-- TAB 1: CATALOG (dynamically rendered by renderCatalogTab) -->
+    <div id="cost-content-catalog" style="display:none" class="flex-1 flex flex-col overflow-hidden"></div>
 
-        <!-- Condition 2 -->
-        <div style="padding:16px 0 8px;display:flex;align-items:baseline;gap:8px;border-top:1px solid var(--neutral-200)">
-          <span style="font-size:14px;font-weight:700;color:var(--neutral-600)">Wall Type B3 @ 13'</span>
-          <span style="font-size:10px;font-weight:500;color:var(--neutral-400)">28 LF × 9 ft</span>
-        </div>
-        <div style="padding:8px 0 4px">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:6px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--neutral-500);background:var(--neutral-200);padding:2px 6px;border-radius:3px">MAT</span><span style="font-size:13px;font-weight:500;color:var(--neutral-600)">Drywall — 1/2" Standard</span></div>
-            <span style="font-size:14px;font-weight:600;color:var(--neutral-600)">$374.22</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-            <div style="display:flex;align-items:center;gap:4px"><span style="font-size:12px;color:var(--neutral-500)">277.2 SF</span><span style="font-size:10px;color:var(--neutral-400);cursor:help" title="252 SF net + 10% waste = 277.2 SF">ⓘ</span></div>
-            <input type="number" step="0.01" value="1.35" placeholder="0.00" style="width:60px;height:28px;border:1px solid var(--neutral-300);border-radius:4px;padding:0 6px;font-family:'Montserrat',sans-serif;font-size:12px;text-align:right;color:var(--neutral-600);outline:none">
-          </div>
-        </div>
-        <div style="padding:4px 0 8px">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:6px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--neutral-400);background:var(--neutral-100);padding:2px 6px;border-radius:3px">LAB</span><span style="font-size:13px;font-weight:500;color:var(--neutral-600)">Drywall Hang — Labor</span></div>
-            <span style="font-size:14px;font-weight:600;color:var(--neutral-600)">$181.44</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-            <div style="display:flex;align-items:center;gap:4px"><span style="font-size:12px;color:var(--neutral-500)">252 SF</span><span style="font-size:10px;color:var(--neutral-400);cursor:help" title="252 SF net">ⓘ</span></div>
-            <input type="number" step="0.01" value="0.72" placeholder="0.00" style="width:60px;height:28px;border:1px solid var(--neutral-300);border-radius:4px;padding:0 6px;font-family:'Montserrat',sans-serif;font-size:12px;text-align:right;color:var(--neutral-600);outline:none">
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 16px;margin-top:4px">
-          <div style="display:flex;gap:16px">
-            <button class="btn-link" style="padding:0;height:auto;font-size:12px">+ Material</button>
-            <button class="btn-link" style="padding:0;height:auto;font-size:12px">+ Labor</button>
-          </div>
-          <span style="font-size:13px;font-weight:700;color:var(--neutral-600)">$555.66</span>
-        </div>
+    <!-- TAB 2: COST (dynamically rendered by renderCostTab) -->
+    <div id="cost-content-cost" style="display:none" class="flex-1 flex flex-col overflow-hidden"></div>
 
-        <!-- Condition 3 -->
-        <div style="padding:16px 0 8px;display:flex;align-items:baseline;gap:8px;border-top:1px solid var(--neutral-200)">
-          <span style="font-size:14px;font-weight:700;color:var(--neutral-600)">DW Ceiling @ Corridor</span>
-          <span style="font-size:10px;font-weight:500;color:var(--neutral-400)">480 SF</span>
+    <!-- TAB 3: SUMMARY (dynamically rendered by renderSummaryTab) -->
+    <div id="cost-content-summary" style="display:none" class="flex-1 flex flex-col overflow-hidden"></div>
+  </div>
+  </div>
+
+  <!-- HEIGHT PROMPT MODAL (State 3) -->
+  <div id="modal-height-prompt" class="modal-overlay" onclick="if(event.target===this)closeBlueprintModal('modal-height-prompt')">
+    <div class="modal-box" style="width:420px;max-height:85vh" role="dialog" aria-modal="true" aria-labelledby="height-prompt-title">
+      <header class="modal-header">
+        <h3 id="height-prompt-title">Set Wall Height</h3>
+        <button type="button" class="modal-close-btn" aria-label="Close" onclick="closeBlueprintModal('modal-height-prompt')"><i class="fa-solid fa-xmark"></i></button>
+      </header>
+      <div class="modal-body" style="padding:24px 32px">
+        <p style="font-size:13px;color:var(--neutral-500);line-height:1.5;margin:0 0 24px">This is a wall-type measurement. Set the height so quantities can be converted from linear feet to square feet for pricing.</p>
+        <label style="display:block;font-size:13px;font-weight:600;color:var(--neutral-600);margin-bottom:8px" for="height-input">Wall Height</label>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+          <input id="height-input" type="number" step="0.5" min="1" max="30" placeholder="e.g. 9" style="flex:1;height:40px;border:1px solid var(--neutral-300);border-radius:6px;padding:0 12px;font-family:'Montserrat',sans-serif;font-size:14px;color:var(--neutral-600);outline:none">
+          <span style="font-size:13px;font-weight:500;color:var(--neutral-500)">ft</span>
         </div>
-        <div style="padding:8px 0 4px">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:6px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--neutral-500);background:var(--neutral-200);padding:2px 6px;border-radius:3px">MAT</span><span style="font-size:13px;font-weight:500;color:var(--neutral-600)">LVP Flooring — 6mm Click-Lock</span></div>
-            <span style="font-size:14px;font-weight:600;color:var(--neutral-600)">$2,069.76</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-            <div style="display:flex;align-items:center;gap:4px"><span style="font-size:12px;color:var(--neutral-500)">537.6 SF</span><span style="font-size:10px;color:var(--neutral-400);cursor:help" title="480 SF net + 12% waste = 537.6 SF">ⓘ</span></div>
-            <input type="number" step="0.01" value="3.85" placeholder="0.00" style="width:60px;height:28px;border:1px solid var(--neutral-300);border-radius:4px;padding:0 6px;font-family:'Montserrat',sans-serif;font-size:12px;text-align:right;color:var(--neutral-600);outline:none">
-          </div>
-        </div>
-        <div style="padding:4px 0 8px">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:6px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--neutral-400);background:var(--neutral-100);padding:2px 6px;border-radius:3px">LAB</span><span style="font-size:13px;font-weight:500;color:var(--neutral-600)">LVP Install — Labor</span></div>
-            <span style="font-size:14px;font-weight:600;color:var(--neutral-600)">$576.00</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-            <div style="display:flex;align-items:center;gap:4px"><span style="font-size:12px;color:var(--neutral-500)">480 SF</span><span style="font-size:10px;color:var(--neutral-400);cursor:help" title="480 SF net">ⓘ</span></div>
-            <input type="number" step="0.01" value="1.20" placeholder="0.00" style="width:60px;height:28px;border:1px solid var(--neutral-300);border-radius:4px;padding:0 6px;font-family:'Montserrat',sans-serif;font-size:12px;text-align:right;color:var(--neutral-600);outline:none">
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 16px;margin-top:4px">
-          <div style="display:flex;gap:16px">
-            <button class="btn-link" style="padding:0;height:auto;font-size:12px">+ Material</button>
-            <button class="btn-link" style="padding:0;height:auto;font-size:12px">+ Labor</button>
-          </div>
-          <span style="font-size:13px;font-weight:700;color:var(--neutral-600)">$2,645.76</span>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <button class="height-quick-btn" onclick="setHeightQuick(8)" style="flex:1;height:40px;border:1px solid var(--neutral-300);border-radius:6px;background:var(--neutral-0,#fff);font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:var(--neutral-600);cursor:pointer">8 ft</button>
+          <button class="height-quick-btn" onclick="setHeightQuick(9)" style="flex:1;height:40px;border:1px solid var(--neutral-300);border-radius:6px;background:var(--neutral-0,#fff);font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:var(--neutral-600);cursor:pointer">9 ft</button>
+          <button class="height-quick-btn" onclick="setHeightQuick(10)" style="flex:1;height:40px;border:1px solid var(--neutral-300);border-radius:6px;background:var(--neutral-0,#fff);font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:var(--neutral-600);cursor:pointer">10 ft</button>
+          <button class="height-quick-btn" onclick="setHeightQuick(12)" style="flex:1;height:40px;border:1px solid var(--neutral-300);border-radius:6px;background:var(--neutral-0,#fff);font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:var(--neutral-600);cursor:pointer">12 ft</button>
         </div>
       </div>
-
-      <!-- Sticky bottom: markup -->
-      <div class="flex-shrink-0" style="border-top:2px solid var(--neutral-300);padding:16px">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:13px;font-weight:600;color:var(--neutral-600)">Markup %</span>
-          <div style="display:flex;align-items:center;gap:4px">
-            <input type="number" id="cost-markup-input" value="15" oninput="recalcCostMarkup()" style="width:60px;height:28px;border:1px solid var(--neutral-300);border-radius:4px;padding:0 6px;font-family:'Montserrat',sans-serif;font-size:12px;text-align:right;color:var(--neutral-600);outline:none">
-            <span style="font-size:12px;color:var(--neutral-400)">%</span>
-          </div>
+      <footer class="modal-footer">
+        <button type="button" class="btn-link" onclick="closeBlueprintModal('modal-height-prompt')">Cancel</button>
+        <div class="modal-footer-right">
+          <button type="button" class="btn-primary" onclick="confirmHeight()">Confirm Height</button>
         </div>
-      </div>
-    </div>
-
-    <!-- TAB 3: SUMMARY -->
-    <div id="cost-content-summary" style="display:none" class="flex-1 flex flex-col overflow-hidden">
-      <div class="flex-1 overflow-y-auto">
-        <table class="w-full" style="border-collapse:collapse">
-          <thead>
-            <tr>
-              <th class="table-header text-left uppercase">Condition</th>
-              <th class="table-header text-left uppercase">Item</th>
-              <th class="table-header text-right uppercase">Qty</th>
-              <th class="table-header text-left uppercase">Unit</th>
-              <th class="table-header text-right uppercase">Unit $</th>
-              <th class="table-header text-right uppercase">Ext Cost</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td colspan="6" style="padding:10px;font-size:13px;font-weight:700;color:var(--neutral-600);background:var(--neutral-100)">Wall Type Q2 @ 13'</td></tr>
-            <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Metal Studs 3-5/8"</td><td class="table-cell text-right">401.6</td><td class="table-cell">SF</td><td class="table-cell text-right">$4.85</td><td class="table-cell text-right">$1,947.88</td></tr>
-            <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Stud Framing Labor</td><td class="table-cell text-right">382.5</td><td class="table-cell">SF</td><td class="table-cell text-right">$1.28</td><td class="table-cell text-right">$489.60</td></tr>
-            <tr><td colspan="5" class="table-cell text-right" style="font-weight:600">Subtotal</td><td class="table-cell text-right" style="font-weight:600">$2,437.48</td></tr>
-
-            <tr><td colspan="6" style="padding:10px;font-size:13px;font-weight:700;color:var(--neutral-600);background:var(--neutral-100)">Wall Type B3 @ 13'</td></tr>
-            <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Drywall 1/2" Std</td><td class="table-cell text-right">277.2</td><td class="table-cell">SF</td><td class="table-cell text-right">$1.35</td><td class="table-cell text-right">$374.22</td></tr>
-            <tr class="table-row"><td class="table-cell"></td><td class="table-cell">DW Hang Labor</td><td class="table-cell text-right">252</td><td class="table-cell">SF</td><td class="table-cell text-right">$0.72</td><td class="table-cell text-right">$181.44</td></tr>
-            <tr><td colspan="5" class="table-cell text-right" style="font-weight:600">Subtotal</td><td class="table-cell text-right" style="font-weight:600">$555.66</td></tr>
-
-            <tr><td colspan="6" style="padding:10px;font-size:13px;font-weight:700;color:var(--neutral-600);background:var(--neutral-100)">DW Ceiling @ Corridor</td></tr>
-            <tr class="table-row"><td class="table-cell"></td><td class="table-cell">LVP 6mm Click-Lock</td><td class="table-cell text-right">537.6</td><td class="table-cell">SF</td><td class="table-cell text-right">$3.85</td><td class="table-cell text-right">$2,069.76</td></tr>
-            <tr class="table-row"><td class="table-cell"></td><td class="table-cell">LVP Install Labor</td><td class="table-cell text-right">480</td><td class="table-cell">SF</td><td class="table-cell text-right">$1.20</td><td class="table-cell text-right">$576.00</td></tr>
-            <tr><td colspan="5" class="table-cell text-right" style="font-weight:600">Subtotal</td><td class="table-cell text-right" style="font-weight:600">$2,645.76</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Sticky bottom: totals -->
-      <div class="flex-shrink-0" style="border-top:2px solid var(--neutral-300);padding:16px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <span style="font-size:14px;font-weight:600;color:var(--neutral-600)">Cost Subtotal</span>
-          <span style="font-size:14px;font-weight:600;color:var(--neutral-600)" id="summary-cost-subtotal">$5,638.90</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <span style="font-size:13px;font-weight:500;color:var(--neutral-500)">Markup</span>
-          <div style="display:flex;align-items:center;gap:8px">
-            <input type="number" id="summary-markup-input" value="15" oninput="recalcSummaryMarkup()" style="width:60px;height:28px;border:1px solid var(--neutral-300);border-radius:4px;padding:0 6px;font-family:'Montserrat',sans-serif;font-size:12px;text-align:right;color:var(--neutral-600);outline:none">
-            <span style="font-size:12px;color:var(--neutral-400)">%</span>
-            <span style="font-size:13px;font-weight:500;color:var(--neutral-500)" id="summary-markup-amount">$845.84</span>
-          </div>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-          <span style="font-size:16px;font-weight:700;color:var(--primary-500)">Bid Total</span>
-          <span style="font-size:16px;font-weight:700;color:var(--primary-500)" id="summary-bid-total-panel">$6,484.74</span>
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn-secondary" style="flex:1;justify-content:center;gap:6px"><i class="fa-solid fa-file-export"></i> Export to Vendor</button>
-          <button class="btn-primary" style="flex:1;justify-content:center;gap:6px"><i class="fa-solid fa-file-arrow-down"></i> Export Proposal</button>
-        </div>
-      </div>
+      </footer>
     </div>
   </div>
+
+  <!-- UPGRADE GATE MODAL (State 6) -->
+  <div id="modal-upgrade-gate" class="modal-overlay" onclick="if(event.target===this)closeBlueprintModal('modal-upgrade-gate')">
+    <div class="modal-box" style="width:520px;max-height:85vh" role="dialog" aria-modal="true" aria-labelledby="upgrade-gate-title">
+      <header class="modal-header">
+        <h3 id="upgrade-gate-title">Upgrade to Unlock Estimating</h3>
+        <button type="button" class="modal-close-btn" aria-label="Close" onclick="closeBlueprintModal('modal-upgrade-gate')"><i class="fa-solid fa-xmark"></i></button>
+      </header>
+      <div class="modal-body" style="padding:32px">
+        <p style="font-size:14px;color:var(--neutral-500);line-height:1.5;margin:0 0 32px">The Estimating panel lets you price measurements, build assemblies, and generate bid proposals — all from your takeoff.</p>
+        <div style="display:flex;gap:16px">
+          <!-- Starter column -->
+          <div style="flex:1;border:1px solid var(--neutral-300);border-radius:8px;padding:24px;display:flex;flex-direction:column">
+            <span style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--neutral-400);letter-spacing:0.05em">Current Plan</span>
+            <span style="font-size:20px;font-weight:700;color:var(--neutral-600);margin:8px 0 4px">Starter</span>
+            <span style="font-size:14px;font-weight:600;color:var(--neutral-600)">Free</span>
+            <div style="margin-top:24px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--neutral-600)"><i class="fa-solid fa-check" style="color:var(--primary-500);width:16px"></i> Takeoff measurements</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--neutral-600)"><i class="fa-solid fa-check" style="color:var(--primary-500);width:16px"></i> Plan uploads</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--neutral-400)"><i class="fa-solid fa-xmark" style="color:var(--neutral-300);width:16px"></i> Estimating panel</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--neutral-400)"><i class="fa-solid fa-xmark" style="color:var(--neutral-300);width:16px"></i> Assembly catalog</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--neutral-400)"><i class="fa-solid fa-xmark" style="color:var(--neutral-300);width:16px"></i> Bid proposals</div>
+            </div>
+          </div>
+          <!-- Pro column -->
+          <div style="flex:1;border:2px solid var(--primary-500);border-radius:8px;padding:24px;display:flex;flex-direction:column;position:relative">
+            <span style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--primary-500);color:#fff;font-size:11px;font-weight:600;text-transform:uppercase;padding:2px 12px;border-radius:10px;white-space:nowrap">Recommended</span>
+            <span style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--primary-500);letter-spacing:0.05em">Upgrade</span>
+            <span style="font-size:20px;font-weight:700;color:var(--neutral-600);margin:8px 0 4px">Pro+</span>
+            <span style="font-size:14px;font-weight:600;color:var(--neutral-600)">$49<span style="font-size:12px;font-weight:400;color:var(--neutral-400)">/mo</span></span>
+            <div style="margin-top:24px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--neutral-600)"><i class="fa-solid fa-check" style="color:var(--primary-500);width:16px"></i> Takeoff measurements</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--neutral-600)"><i class="fa-solid fa-check" style="color:var(--primary-500);width:16px"></i> Plan uploads</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--neutral-600)"><i class="fa-solid fa-check" style="color:var(--primary-500);width:16px"></i> Estimating panel</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--neutral-600)"><i class="fa-solid fa-check" style="color:var(--primary-500);width:16px"></i> Assembly catalog</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--neutral-600)"><i class="fa-solid fa-check" style="color:var(--primary-500);width:16px"></i> Bid proposals</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="modal-footer" style="border-top:none;padding-top:0">
+        <button type="button" class="btn-link" onclick="closeBlueprintModal('modal-upgrade-gate')">Maybe later</button>
+        <div class="modal-footer-right">
+          <button type="button" class="btn-primary" onclick="upgradeUserPlan()">Upgrade to Pro</button>
+        </div>
+      </footer>
+    </div>
   </div>
 </div>
 
@@ -1341,6 +1218,20 @@ let state = {
   noAIDocs: null,
   customTypes: [],
   customSubtypes: [],
+  userPlan: 'pro',
+  measurements: [
+    { id: 'm1', name: "Wall Type Q2 @ 13'", type: 'wall', quantity: 42.5, unit: 'LF', height: null, pricedItems: [] },
+    { id: 'm2', name: "Wall Type B3 @ 13'", type: 'wall', quantity: 28, unit: 'LF', height: 9, pricedItems: [
+      { type: 'MAT', name: 'Drywall — 1/2" Standard', netQty: 252, adjQty: 277.2, waste: 10, unit: 'SF', unitCost: 1.35, extCost: 374.22 },
+      { type: 'LAB', name: 'Drywall Hang — Labor', netQty: 252, adjQty: 252, waste: 0, unit: 'SF', unitCost: 0.72, extCost: 181.44 }
+    ]},
+    { id: 'm3', name: 'DW Ceiling @ Corridor', type: 'area', quantity: 480, unit: 'SF', height: null, pricedItems: [
+      { type: 'MAT', name: 'LVP Flooring — 6mm Click-Lock', netQty: 480, adjQty: 537.6, waste: 12, unit: 'SF', unitCost: 3.85, extCost: 2069.76 },
+      { type: 'LAB', name: 'LVP Install — Labor', netQty: 480, adjQty: 480, waste: 0, unit: 'SF', unitCost: 1.20, extCost: 576.00 }
+    ]}
+  ],
+  markupPercent: 15,
+  contextMeasurement: null,
 };
 
 // ===================== HELPERS =====================
@@ -1561,41 +1452,426 @@ function handleSummaryNav() {
   }
 }
 
-function switchCostTab(tab) {
+function switchCostTab(tab, contextMeasurementId) {
   var tabs = ['catalog', 'cost', 'summary'];
-  var active = 'var(--neutral-600)';
-  var inactive = 'var(--neutral-500)';
-  var accent = 'var(--primary-500)';
   tabs.forEach(function(t) {
     var tabEl = document.getElementById('cost-tab-' + t);
     var contentEl = document.getElementById('cost-content-' + t);
-    if (!tabEl || !contentEl) return;
+    if (!tabEl) return;
     if (t === tab) {
       tabEl.style.fontWeight = '700';
-      tabEl.style.color = active;
-      tabEl.style.borderBottom = '3px solid ' + accent;
-      contentEl.style.display = 'flex';
+      tabEl.style.color = 'var(--neutral-600)';
+      tabEl.style.borderBottom = '3px solid var(--primary-500)';
+      if (contentEl) contentEl.style.display = 'flex';
     } else {
       tabEl.style.fontWeight = '400';
-      tabEl.style.color = inactive;
+      tabEl.style.color = 'var(--neutral-500)';
       tabEl.style.borderBottom = 'none';
-      contentEl.style.display = 'none';
+      if (contentEl) contentEl.style.display = 'none';
     }
+  });
+  if (tab === 'catalog') renderCatalogTab(contextMeasurementId || null);
+  if (tab === 'cost') renderCostTab();
+  if (tab === 'summary') renderSummaryTab();
+}
+
+function fmt(n) {
+  return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// ===================== PANEL ROUTING =====================
+function renderEstimatingPanel() {
+  var hasMeasurements = state.measurements && state.measurements.length > 0;
+  var hasUnpriced = hasMeasurements && state.measurements.some(function(m) { return !m.pricedItems || m.pricedItems.length === 0; });
+  var hasPriced = hasMeasurements && state.measurements.some(function(m) { return m.pricedItems && m.pricedItems.length > 0; });
+
+  var emptyEl = document.getElementById('ep-empty-state');
+  var unpricedEl = document.getElementById('ep-unpriced');
+  var tabBar = document.getElementById('ep-tab-bar');
+  var catalogEl = document.getElementById('cost-content-catalog');
+  var costEl = document.getElementById('cost-content-cost');
+  var summaryEl = document.getElementById('cost-content-summary');
+
+  // Hide all first
+  if (emptyEl) emptyEl.style.display = 'none';
+  if (unpricedEl) unpricedEl.style.display = 'none';
+  if (tabBar) tabBar.style.display = 'none';
+  if (catalogEl) catalogEl.style.display = 'none';
+  if (costEl) costEl.style.display = 'none';
+  if (summaryEl) summaryEl.style.display = 'none';
+
+  if (!hasMeasurements) {
+    if (emptyEl) emptyEl.style.display = 'flex';
+    return;
+  }
+
+  if (tabBar) tabBar.style.display = 'flex';
+
+  if (hasUnpriced && !hasPriced) {
+    renderUnpricedMeasurements();
+    if (unpricedEl) unpricedEl.style.display = 'flex';
+    switchCostTab('catalog');
+  } else {
+    switchCostTab('cost');
+  }
+
+  if (hasUnpriced) {
+    renderUnpricedMeasurements();
+    if (unpricedEl) unpricedEl.style.display = 'flex';
+  }
+}
+
+// ===================== STATE 2: UNPRICED MEASUREMENTS =====================
+function renderUnpricedMeasurements() {
+  var container = document.getElementById('ep-unpriced');
+  if (!container) return;
+  var unpriced = state.measurements.filter(function(m) { return !m.pricedItems || m.pricedItems.length === 0; });
+  if (unpriced.length === 0) { container.innerHTML = ''; return; }
+
+  var html = '<div style="padding:16px"><div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--neutral-400);letter-spacing:0.05em;margin-bottom:16px">Unpriced Measurements (' + unpriced.length + ')</div>';
+  unpriced.forEach(function(m) {
+    var qtyLabel = m.quantity + ' ' + m.unit;
+    if (m.type === 'wall' && m.height) qtyLabel += ' × ' + m.height + ' ft';
+    var needsHeight = m.type === 'wall' && !m.height;
+    html += '<div style="background:var(--neutral-100);border-radius:8px;padding:16px;margin-bottom:12px">';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">';
+    html += '<span style="font-size:14px;font-weight:600;color:var(--neutral-600)">' + m.name + '</span>';
+    html += '<span style="font-size:12px;font-weight:600;color:var(--neutral-500);background:var(--neutral-200);padding:2px 10px;border-radius:10px">' + qtyLabel + '</span>';
+    html += '</div>';
+    if (needsHeight) {
+      html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;padding:8px 12px;background:#FFF8E1;border-radius:6px;border:1px solid #FFE082">';
+      html += '<i class="fa-solid fa-triangle-exclamation" style="font-size:12px;color:#F5A623"></i>';
+      html += '<span style="font-size:12px;color:#8B6914">Height required for pricing</span>';
+      html += '<button class="btn-link" style="margin-left:auto;padding:0;height:auto;font-size:12px" onclick="openHeightPrompt(\'' + m.id + '\')">Set height</button>';
+      html += '</div>';
+    }
+    html += '<div style="position:relative">';
+    html += '<i class="fa-solid fa-magnifying-glass" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--neutral-400);font-size:12px"></i>';
+    var disabledAttr = needsHeight ? 'disabled style="width:100%;height:36px;border:1px solid var(--neutral-300);border-radius:6px;padding:0 12px 0 32px;font-family:\'Montserrat\',sans-serif;font-size:13px;color:var(--neutral-600);outline:none;background:var(--neutral-200);cursor:not-allowed;opacity:0.6"' : 'onclick="openCatalogForMeasurement(\'' + m.id + '\')" readonly style="width:100%;height:36px;border:1px solid var(--neutral-300);border-radius:6px;padding:0 12px 0 32px;font-family:\'Montserrat\',sans-serif;font-size:13px;color:var(--neutral-600);outline:none;background:var(--neutral-0,#fff);cursor:pointer"';
+    html += '<input type="text" placeholder="Search assemblies to apply..." ' + disabledAttr + '>';
+    html += '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ===================== STATE 3: HEIGHT PROMPT =====================
+var _heightPromptMeasurementId = null;
+
+function openHeightPrompt(measurementId) {
+  _heightPromptMeasurementId = measurementId;
+  var input = document.getElementById('height-input');
+  if (input) input.value = '';
+  document.querySelectorAll('.height-quick-btn').forEach(function(b) {
+    b.style.background = 'var(--neutral-0, #fff)';
+    b.style.borderColor = 'var(--neutral-300)';
+    b.style.color = 'var(--neutral-600)';
+  });
+  openBlueprintModal('modal-height-prompt');
+}
+
+function setHeightQuick(val) {
+  var input = document.getElementById('height-input');
+  if (input) input.value = val;
+  document.querySelectorAll('.height-quick-btn').forEach(function(b) {
+    var isActive = parseInt(b.textContent) === val;
+    b.style.background = isActive ? 'var(--primary-500)' : 'var(--neutral-0, #fff)';
+    b.style.borderColor = isActive ? 'var(--primary-500)' : 'var(--neutral-300)';
+    b.style.color = isActive ? '#fff' : 'var(--neutral-600)';
   });
 }
 
+function confirmHeight() {
+  var input = document.getElementById('height-input');
+  var val = parseFloat(input ? input.value : 0);
+  if (!val || val <= 0) return;
+  var m = state.measurements.find(function(x) { return x.id === _heightPromptMeasurementId; });
+  if (m) m.height = val;
+  closeBlueprintModal('modal-height-prompt');
+  _heightPromptMeasurementId = null;
+  renderEstimatingPanel();
+}
+
+// ===================== STATE 6: UPGRADE GATE =====================
+function upgradeUserPlan() {
+  state.userPlan = 'pro';
+  closeBlueprintModal('modal-upgrade-gate');
+  toggleEstimatingPanel();
+}
+
+// ===================== STATE 4: CATALOG TAB =====================
+function openCatalogForMeasurement(measurementId) {
+  state.contextMeasurement = measurementId;
+  switchCostTab('catalog', measurementId);
+}
+
+function renderCatalogTab(contextMeasurementId) {
+  var container = document.getElementById('cost-content-catalog');
+  if (!container) return;
+
+  var contextMode = !!contextMeasurementId;
+  var m = contextMode ? state.measurements.find(function(x) { return x.id === contextMeasurementId; }) : null;
+  var html = '';
+
+  if (contextMode && m) {
+    html += '<div style="padding:12px 16px;background:var(--neutral-100);border-bottom:1px solid var(--neutral-200);display:flex;align-items:center;justify-content:space-between">';
+    html += '<div style="font-size:13px;font-weight:600;color:var(--neutral-600)">Pricing: ' + m.name + '</div>';
+    html += '<button class="btn-link" style="padding:0;height:auto;font-size:12px" onclick="state.contextMeasurement=null;switchCostTab(\'catalog\')">Clear</button>';
+    html += '</div>';
+    html += '<div style="padding:12px 16px;display:flex;gap:8px">';
+    html += '<button class="btn-link" style="padding:0;height:auto;font-size:13px" onclick="addSampleItemToMeasurement(\'' + m.id + '\',\'MAT\')"><i class="fa-solid fa-plus" style="font-size:10px"></i> Material</button>';
+    html += '<button class="btn-link" style="padding:0;height:auto;font-size:13px" onclick="addSampleItemToMeasurement(\'' + m.id + '\',\'LAB\')"><i class="fa-solid fa-plus" style="font-size:10px"></i> Labor</button>';
+    html += '</div>';
+  }
+
+  html += '<div style="padding:16px 16px 8px"><div style="position:relative">';
+  html += '<i class="fa-solid fa-magnifying-glass" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--neutral-400);font-size:13px"></i>';
+  html += '<input type="text" placeholder="Search assemblies..." style="width:100%;height:36px;border:1px solid var(--neutral-300);border-radius:6px;padding:0 12px 0 32px;font-family:\'Montserrat\',sans-serif;font-size:13px;color:var(--neutral-600);outline:none;background:var(--neutral-0,#fff)">';
+  html += '</div></div>';
+
+  html += '<div style="padding:0 16px 8px;display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid var(--neutral-300);margin:0 16px">';
+  html += '<button style="flex:1;padding:6px 0;font-size:12px;font-weight:600;font-family:\'Montserrat\',sans-serif;border:none;cursor:pointer;background:var(--primary-500);color:#fff">Assemblies</button>';
+  html += '<button style="flex:1;padding:6px 0;font-size:12px;font-weight:600;font-family:\'Montserrat\',sans-serif;border:none;cursor:pointer;background:#fff;color:var(--neutral-600)">Items</button>';
+  html += '</div>';
+
+  html += '<div style="padding:8px 16px;display:flex;gap:6px;flex-wrap:wrap">';
+  var chips = ['All', 'Drywall', 'ACT', 'Painting', 'Flooring'];
+  chips.forEach(function(c, i) {
+    var active = i === 0;
+    html += '<span style="padding:4px 12px;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;background:' + (active ? 'var(--primary-500)' : 'var(--neutral-200)') + ';color:' + (active ? '#fff' : 'var(--neutral-600)') + '">' + c + '</span>';
+  });
+  html += '</div>';
+
+  var assemblies = [
+    { name: 'Wall Type Q2 — Metal Stud + Drywall', parts: 4, category: 'Drywall' },
+    { name: 'Wall Type B3 — Single Layer DW', parts: 3, category: 'Drywall' },
+    { name: 'ACT 1 — 24×24 Grid + Tile', parts: 5, category: 'ACT' },
+    { name: 'LVP Flooring — 6mm Click-Lock', parts: 2, category: 'Flooring' },
+    { name: 'Interior Paint — 2 Coat Eggshell', parts: 3, category: 'Painting' },
+    { name: 'DW Ceiling — Standard Hang + Finish', parts: 3, category: 'Drywall' }
+  ];
+  html += '<div class="flex-1 overflow-y-auto" style="padding:0 16px">';
+  assemblies.forEach(function(a) {
+    var clickAttr = contextMode && m ? ' onclick="applyAssemblyToMeasurement(\'' + m.id + '\',\'' + a.name.replace(/'/g, "\\'") + '\')" style="cursor:pointer;border-bottom:1px solid var(--neutral-200);padding:12px 0"' : ' style="border-bottom:1px solid var(--neutral-200);padding:12px 0"';
+    html += '<div' + clickAttr + '>';
+    html += '<div style="font-size:14px;font-weight:600;color:var(--neutral-600)">' + a.name + '</div>';
+    html += '<div style="font-size:12px;color:var(--neutral-500);margin-top:2px">' + a.parts + ' parts · <span style="color:var(--primary-500)">' + a.category + '</span></div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  html += '<div style="padding:12px 16px;flex-shrink:0"><button class="btn-link" style="padding:0;height:auto;font-size:13px">+ Add Assembly</button></div>';
+
+  container.innerHTML = html;
+}
+
+function addSampleItemToMeasurement(measurementId, type) {
+  var m = state.measurements.find(function(x) { return x.id === measurementId; });
+  if (!m) return;
+  var baseQty = m.type === 'wall' && m.height ? m.quantity * m.height : m.quantity;
+  var waste = type === 'MAT' ? 10 : 0;
+  var adjQty = baseQty * (1 + waste / 100);
+  var unitCost = type === 'MAT' ? 1.50 : 0.85;
+  m.pricedItems.push({
+    type: type,
+    name: type === 'MAT' ? 'New Material Item' : 'New Labor Item',
+    netQty: baseQty,
+    adjQty: Math.round(adjQty * 10) / 10,
+    waste: waste,
+    unit: 'SF',
+    unitCost: unitCost,
+    extCost: Math.round(adjQty * unitCost * 100) / 100
+  });
+  state.contextMeasurement = null;
+  renderEstimatingPanel();
+  switchCostTab('cost');
+}
+
+function applyAssemblyToMeasurement(measurementId, assemblyName) {
+  var m = state.measurements.find(function(x) { return x.id === measurementId; });
+  if (!m) return;
+  if (m.type === 'wall' && !m.height) {
+    openHeightPrompt(m.id);
+    return;
+  }
+  var baseQty = m.type === 'wall' && m.height ? m.quantity * m.height : m.quantity;
+  m.pricedItems = [
+    { type: 'MAT', name: assemblyName.split(' — ')[0] + ' — Material', netQty: baseQty, adjQty: Math.round(baseQty * 1.1 * 10) / 10, waste: 10, unit: 'SF', unitCost: 2.15, extCost: Math.round(baseQty * 1.1 * 2.15 * 100) / 100 },
+    { type: 'LAB', name: assemblyName.split(' — ')[0] + ' — Labor', netQty: baseQty, adjQty: baseQty, waste: 0, unit: 'SF', unitCost: 0.95, extCost: Math.round(baseQty * 0.95 * 100) / 100 }
+  ];
+  state.contextMeasurement = null;
+  renderEstimatingPanel();
+  switchCostTab('cost');
+}
+
+// ===================== STATE 5: COST TAB (BID COSTED) =====================
+function renderCostTab() {
+  var container = document.getElementById('cost-content-cost');
+  if (!container) return;
+  var priced = state.measurements.filter(function(m) { return m.pricedItems && m.pricedItems.length > 0; });
+
+  if (priced.length === 0) {
+    container.innerHTML = '<div class="flex-1 flex flex-col items-center justify-center" style="padding:32px"><i class="fa-solid fa-receipt" style="font-size:24px;color:var(--neutral-300);margin-bottom:16px"></i><p style="font-size:13px;color:var(--neutral-500);text-align:center">No priced measurements yet. Apply assemblies from the Catalog tab.</p></div>';
+    return;
+  }
+
+  var html = '<div class="flex-1 overflow-y-auto" style="padding:0 16px">';
+  var projectTotal = 0;
+
+  priced.forEach(function(m, idx) {
+    var qtyLabel = m.quantity + ' ' + m.unit;
+    if (m.type === 'wall' && m.height) qtyLabel += ' × ' + m.height + ' ft';
+    var conditionTotal = 0;
+
+    html += '<div style="' + (idx > 0 ? 'border-top:1px solid var(--neutral-200);' : '') + 'padding:16px 0 8px;display:flex;align-items:baseline;gap:8px">';
+    html += '<span style="font-size:14px;font-weight:700;color:var(--neutral-600)">' + m.name + '</span>';
+    html += '<span style="font-size:10px;font-weight:500;color:var(--neutral-400)">' + qtyLabel + '</span>';
+    html += '</div>';
+
+    m.pricedItems.forEach(function(item) {
+      conditionTotal += item.extCost;
+      var isMat = item.type === 'MAT';
+      var badgeBg = isMat ? 'var(--neutral-200)' : 'var(--neutral-100)';
+      var badgeColor = isMat ? 'var(--neutral-500)' : 'var(--neutral-400)';
+      var wasteInfo = item.waste > 0 ? item.netQty + ' ' + item.unit + ' net + ' + item.waste + '% waste = ' + item.adjQty + ' ' + item.unit : item.netQty + ' ' + item.unit + ' net';
+
+      html += '<div style="padding:' + (isMat ? '8px 0 4px' : '4px 0 8px') + '">';
+      html += '<div style="display:flex;align-items:center;justify-content:space-between">';
+      html += '<div style="display:flex;align-items:center;gap:6px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:' + badgeColor + ';background:' + badgeBg + ';padding:2px 6px;border-radius:3px">' + item.type + '</span><span style="font-size:13px;font-weight:500;color:var(--neutral-600)">' + item.name + '</span></div>';
+      html += '<span style="font-size:14px;font-weight:600;color:var(--neutral-600)">' + fmt(item.extCost) + '</span>';
+      html += '</div>';
+      html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">';
+      html += '<div style="display:flex;align-items:center;gap:4px"><span style="font-size:12px;color:var(--neutral-500)">' + item.adjQty + ' ' + item.unit + '</span><span style="font-size:10px;color:var(--neutral-400);cursor:help" title="' + wasteInfo + '">ⓘ</span></div>';
+      html += '<input type="number" step="0.01" value="' + item.unitCost.toFixed(2) + '" style="width:60px;height:28px;border:1px solid var(--neutral-300);border-radius:4px;padding:0 6px;font-family:\'Montserrat\',sans-serif;font-size:12px;text-align:right;color:var(--neutral-600);outline:none">';
+      html += '</div>';
+      html += '</div>';
+    });
+
+    projectTotal += conditionTotal;
+
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 16px;margin-top:4px">';
+    html += '<div style="display:flex;gap:16px">';
+    html += '<button class="btn-link" style="padding:0;height:auto;font-size:12px" onclick="openCatalogForMeasurement(\'' + m.id + '\')">+ Material</button>';
+    html += '<button class="btn-link" style="padding:0;height:auto;font-size:12px" onclick="openCatalogForMeasurement(\'' + m.id + '\')">+ Labor</button>';
+    html += '</div>';
+    html += '<span style="font-size:13px;font-weight:700;color:var(--neutral-600)">' + fmt(conditionTotal) + '</span>';
+    html += '</div>';
+  });
+
+  html += '</div>';
+
+  html += '<div class="flex-shrink-0" style="border-top:2px solid var(--neutral-300);padding:16px">';
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">';
+  html += '<span style="font-size:14px;font-weight:600;color:var(--neutral-600)">Cost Subtotal</span>';
+  html += '<span style="font-size:14px;font-weight:600;color:var(--neutral-600)">' + fmt(projectTotal) + '</span>';
+  html += '</div>';
+  var markupPct = state.markupPercent || 0;
+  var markupAmt = projectTotal * markupPct / 100;
+  var bidTotal = projectTotal + markupAmt;
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">';
+  html += '<span style="font-size:13px;font-weight:500;color:var(--neutral-500)">Markup</span>';
+  html += '<div style="display:flex;align-items:center;gap:4px">';
+  html += '<input type="number" id="cost-markup-input" value="' + markupPct + '" oninput="recalcCostMarkup()" style="width:60px;height:28px;border:1px solid var(--neutral-300);border-radius:4px;padding:0 6px;font-family:\'Montserrat\',sans-serif;font-size:12px;text-align:right;color:var(--neutral-600);outline:none">';
+  html += '<span style="font-size:12px;color:var(--neutral-400)">%</span>';
+  html += '</div>';
+  html += '</div>';
+  html += '<div style="display:flex;align-items:center;justify-content:space-between">';
+  html += '<span style="font-size:16px;font-weight:700;color:var(--primary-500)">Bid Total</span>';
+  html += '<span style="font-size:16px;font-weight:700;color:var(--primary-500)" id="cost-bid-total">' + fmt(bidTotal) + '</span>';
+  html += '</div>';
+  html += '</div>';
+
+  container.innerHTML = html;
+}
+
 function recalcCostMarkup() {
-  // placeholder — no totals displayed on Cost tab, just the input
+  var input = document.getElementById('cost-markup-input');
+  var pct = parseFloat(input ? input.value : 0) || 0;
+  state.markupPercent = pct;
+  var priced = state.measurements.filter(function(m) { return m.pricedItems && m.pricedItems.length > 0; });
+  var subtotal = 0;
+  priced.forEach(function(m) { m.pricedItems.forEach(function(item) { subtotal += item.extCost; }); });
+  var bidTotal = subtotal + (subtotal * pct / 100);
+  var el = document.getElementById('cost-bid-total');
+  if (el) el.textContent = fmt(bidTotal);
+}
+
+// ===================== SUMMARY TAB =====================
+function renderSummaryTab() {
+  var container = document.getElementById('cost-content-summary');
+  if (!container) return;
+  var priced = state.measurements.filter(function(m) { return m.pricedItems && m.pricedItems.length > 0; });
+
+  if (priced.length === 0) {
+    container.innerHTML = '<div class="flex-1 flex flex-col items-center justify-center" style="padding:32px"><p style="font-size:13px;color:var(--neutral-500);text-align:center">No priced items to summarize yet.</p></div>';
+    return;
+  }
+
+  var subtotal = 0;
+  var html = '<div class="flex-1 overflow-y-auto"><table class="w-full" style="border-collapse:collapse"><thead><tr>';
+  html += '<th class="table-header text-left uppercase">Condition</th>';
+  html += '<th class="table-header text-left uppercase">Item</th>';
+  html += '<th class="table-header text-right uppercase">Qty</th>';
+  html += '<th class="table-header text-left uppercase">Unit</th>';
+  html += '<th class="table-header text-right uppercase">Unit $</th>';
+  html += '<th class="table-header text-right uppercase">Ext Cost</th>';
+  html += '</tr></thead><tbody>';
+
+  priced.forEach(function(m) {
+    var condTotal = 0;
+    html += '<tr><td colspan="6" style="padding:10px;font-size:13px;font-weight:700;color:var(--neutral-600);background:var(--neutral-100)">' + m.name + '</td></tr>';
+    m.pricedItems.forEach(function(item) {
+      condTotal += item.extCost;
+      html += '<tr class="table-row"><td class="table-cell"></td><td class="table-cell">' + item.name + '</td><td class="table-cell text-right">' + item.adjQty + '</td><td class="table-cell">' + item.unit + '</td><td class="table-cell text-right">' + fmt(item.unitCost) + '</td><td class="table-cell text-right">' + fmt(item.extCost) + '</td></tr>';
+    });
+    subtotal += condTotal;
+    html += '<tr><td colspan="5" class="table-cell text-right" style="font-weight:600">Subtotal</td><td class="table-cell text-right" style="font-weight:600">' + fmt(condTotal) + '</td></tr>';
+  });
+
+  html += '</tbody></table></div>';
+
+  var markupPct = state.markupPercent || 0;
+  var markupAmt = subtotal * markupPct / 100;
+  var bidTotal = subtotal + markupAmt;
+
+  html += '<div class="flex-shrink-0" style="border-top:2px solid var(--neutral-300);padding:16px">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">';
+  html += '<span style="font-size:14px;font-weight:600;color:var(--neutral-600)">Cost Subtotal</span>';
+  html += '<span style="font-size:14px;font-weight:600;color:var(--neutral-600)">' + fmt(subtotal) + '</span>';
+  html += '</div>';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">';
+  html += '<span style="font-size:13px;font-weight:500;color:var(--neutral-500)">Markup</span>';
+  html += '<div style="display:flex;align-items:center;gap:8px">';
+  html += '<input type="number" id="summary-markup-input" value="' + markupPct + '" oninput="recalcSummaryMarkup()" style="width:60px;height:28px;border:1px solid var(--neutral-300);border-radius:4px;padding:0 6px;font-family:\'Montserrat\',sans-serif;font-size:12px;text-align:right;color:var(--neutral-600);outline:none">';
+  html += '<span style="font-size:12px;color:var(--neutral-400)">%</span>';
+  html += '<span style="font-size:13px;font-weight:500;color:var(--neutral-500)" id="summary-markup-amount">' + fmt(markupAmt) + '</span>';
+  html += '</div></div>';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">';
+  html += '<span style="font-size:16px;font-weight:700;color:var(--primary-500)">Bid Total</span>';
+  html += '<span style="font-size:16px;font-weight:700;color:var(--primary-500)" id="summary-bid-total-panel">' + fmt(bidTotal) + '</span>';
+  html += '</div>';
+  html += '<div style="display:flex;gap:8px">';
+  html += '<button class="btn-secondary" style="flex:1;justify-content:center;gap:6px"><i class="fa-solid fa-file-export"></i> Export to Vendor</button>';
+  html += '<button class="btn-primary" style="flex:1;justify-content:center;gap:6px"><i class="fa-solid fa-file-arrow-down"></i> Export Proposal</button>';
+  html += '</div></div>';
+
+  container.innerHTML = html;
 }
 
 function recalcSummaryMarkup() {
-  var subtotal = 5638.90;
+  var priced = state.measurements.filter(function(m) { return m.pricedItems && m.pricedItems.length > 0; });
+  var subtotal = 0;
+  priced.forEach(function(m) { m.pricedItems.forEach(function(item) { subtotal += item.extCost; }); });
   var input = document.getElementById('summary-markup-input');
-  var pct = parseFloat(input.value) || 0;
+  var pct = parseFloat(input ? input.value : 0) || 0;
+  state.markupPercent = pct;
   var markupAmt = subtotal * pct / 100;
   var bidTotal = subtotal + markupAmt;
-  document.getElementById('summary-markup-amount').textContent = '$' + markupAmt.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
-  document.getElementById('summary-bid-total-panel').textContent = '$' + bidTotal.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  var amtEl = document.getElementById('summary-markup-amount');
+  var totalEl = document.getElementById('summary-bid-total-panel');
+  if (amtEl) amtEl.textContent = fmt(markupAmt);
+  if (totalEl) totalEl.textContent = fmt(bidTotal);
 }
 
 // ===================== TABS =====================
@@ -2359,9 +2635,15 @@ function toggleEstimatingPanel() {
   var panel = document.getElementById('estimating-panel');
   var btn = document.getElementById('btn-toggle-estimating');
   if (!panel || !btn) return;
-  if (panel.style.display === 'none') {
+
+  if (panel.style.display === 'none' || panel.style.display === '') {
+    if (state.userPlan === 'starter') {
+      openBlueprintModal('modal-upgrade-gate');
+      return;
+    }
     panel.style.display = 'flex';
-    btn.style.color = '#0C79A8';
+    btn.style.color = 'var(--primary-500)';
+    renderEstimatingPanel();
   } else {
     panel.style.display = 'none';
     btn.style.color = '';
