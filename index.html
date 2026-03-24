@@ -606,14 +606,16 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
       <span class="px-3 text-sm font-medium text-white" id="takeoff-page-indicator">3 of 21</span>
       <button class="w-[36px] h-[36px] flex items-center justify-center text-white bg-transparent border-none cursor-pointer hover:bg-white/20 text-sm"><i class="fa-solid fa-chevron-right"></i></button>
     </div>
+  </div>
+  <!-- END canvas area -->
 
-    <!-- Estimating Cost Panel (overlays canvas) -->
-    <div class="flex flex-col bg-white shrink-0" id="estimating-panel" style="display:none;position:absolute;top:0;right:0;width:380px;height:100%;border-left:1px solid var(--neutral-300);z-index:20">
+  <!-- Estimating Cost Panel (docked right side) -->
+  <div class="flex flex-col bg-white shrink-0" id="estimating-panel" style="display:flex;width:380px;height:100%;border-left:1px solid #DAD8D7">
 
-    <!-- Tab bar (hidden in empty state, shown via JS) -->
+    <!-- Tab bar -->
     <div id="ep-tab-bar" class="flex items-center" style="border-bottom:1px solid var(--neutral-300)">
-      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:400;color:var(--neutral-500)" id="cost-tab-catalog" onclick="switchCostTab('catalog')">Catalog</div>
-      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:700;color:var(--neutral-600);border-bottom:3px solid var(--primary-500)" id="cost-tab-cost" onclick="switchCostTab('cost')">Cost</div>
+      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:400;color:#495565" id="cost-tab-catalog" onclick="switchCostTab('catalog')">Catalog</div>
+      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:700;color:#1C1E21;border-bottom:3px solid #0C79A8" id="cost-tab-cost" onclick="switchCostTab('cost')">Cost</div>
       <div class="flex items-center gap-1 flex-shrink-0" style="padding:0 8px">
         <button class="icon-btn" title="Open in new tab"><i class="fa-solid fa-up-right-from-square"></i></button>
         <button class="icon-btn" title="Close panel" onclick="toggleEstimatingPanel()"><i class="fa-solid fa-chevron-right"></i></button>
@@ -637,6 +639,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
     <div id="cost-content-cost" style="display:none" class="flex-1 flex flex-col overflow-hidden"></div>
 
   </div>
+  <!-- END wrapper -->
   </div>
 
   <!-- HEIGHT PROMPT MODAL (State 3) -->
@@ -1316,6 +1319,7 @@ function showScreen(name) {
   state.currentScreen = name;
   hideContextMenu();
   if (name === 'projects') renderProjectsTable();
+  if (name === 'takeoff') renderEstimatingPanel();
 }
 
 function navigateToDocuments(projectId) {
@@ -1584,10 +1588,10 @@ function renderCatalogTab(contextMeasurementId) {
       if (um.type === 'wall' && um.height) qtyLabel += ' × ' + um.height + ' ft';
       var needsHeight = um.type === 'wall' && !um.height;
       var isClickable = !needsHeight;
-      html += '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;' + (isClickable ? 'cursor:pointer' : '') + '"' + (isClickable ? ' onclick="openCatalogForMeasurement(\'' + um.id + '\')"' : '') + '>';
+      html += '<div style="display:flex;align-items:center;gap:8px;padding:6px 4px;margin:0 -4px;border-radius:4px;' + (isClickable ? 'cursor:pointer;transition:background 150ms ease' : '') + '"' + (isClickable ? ' onclick="openCatalogForMeasurement(\'' + um.id + '\')" onmouseenter="this.style.background=\'var(--primary-100)\'" onmouseleave="this.style.background=\'transparent\'"' : '') + '>';
       html += '<span style="font-size:13px;font-weight:500;color:var(--neutral-600);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + um.name + '</span>';
       if (needsHeight) {
-        html += '<span style="font-size:11px;color:#8B6914;white-space:nowrap;display:flex;align-items:center;gap:4px"><i class="fa-solid fa-triangle-exclamation" style="font-size:10px;color:#F5A623"></i> <button class="btn-link" style="padding:0;height:auto;font-size:11px" onclick="event.stopPropagation();openHeightPrompt(\'' + um.id + '\')">Set height</button></span>';
+        html += '<button style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:4px;border:1px solid #F5A623;background:#FFF8E7;font-family:\'Montserrat\',sans-serif;font-size:11px;font-weight:600;color:#8B6914;cursor:pointer;white-space:nowrap;transition:background 150ms ease" onmouseenter="this.style.background=\'#FFEEBB\'" onmouseleave="this.style.background=\'#FFF8E7\'" onclick="event.stopPropagation();openHeightPrompt(\'' + um.id + '\')"><i class="fa-solid fa-ruler-vertical" style="font-size:10px"></i> Set height</button>';
       }
       html += '<span style="font-size:11px;font-weight:600;color:var(--neutral-500);background:var(--neutral-200);padding:2px 8px;border-radius:10px;white-space:nowrap">' + qtyLabel + '</span>';
       html += '</div>';
@@ -1606,6 +1610,7 @@ function renderCatalogTab(contextMeasurementId) {
     html += '<button class="btn-link" style="padding:0;height:auto;font-size:13px" onclick="addSampleItemToMeasurement(\'' + m.id + '\',\'MAT\')"><i class="fa-solid fa-plus" style="font-size:10px"></i> Material</button>';
     html += '<button class="btn-link" style="padding:0;height:auto;font-size:13px" onclick="addSampleItemToMeasurement(\'' + m.id + '\',\'LAB\')"><i class="fa-solid fa-plus" style="font-size:10px"></i> Labor</button>';
     html += '</div>';
+    html += '<div style="padding:8px 16px 0;font-size:12px;color:var(--neutral-500);display:flex;align-items:center;gap:6px;flex-shrink:0"><i class="fa-solid fa-arrow-down" style="font-size:10px;color:var(--neutral-400)"></i> Pick an assembly below to price this measurement</div>';
   }
 
   // -- Search input --
@@ -2582,6 +2587,7 @@ document.getElementById('nav-takeoff').innerHTML = renderNav('takeoff');
 document.getElementById('nav-summary-no-project').innerHTML = renderNav('summary');
 document.getElementById('nav-summary').innerHTML = renderNav('summary');
 renderProjectsTable();
+renderEstimatingPanel();
 </script>
 </body>
 </html>
