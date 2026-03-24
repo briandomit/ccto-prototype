@@ -610,7 +610,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
   </div>
 
   <!-- Main takeoff area -->
-  <div class="flex-1 flex flex-col h-full bg-white">
+  <div class="flex-1 flex flex-col h-full bg-white min-w-0 overflow-hidden">
     <!-- #20: Toolbar at TOP -->
     <div class="border-b border-border-gray">
       <div class="flex items-center px-4 py-2 gap-3">
@@ -670,6 +670,62 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
         <button class="w-[36px] h-[36px] flex items-center justify-center text-white bg-transparent border-none cursor-pointer hover:bg-white/20 text-sm"><i class="fa-solid fa-chevron-left"></i></button>
         <span class="px-3 text-sm font-medium text-white" id="takeoff-page-indicator">3 of 21</span>
         <button class="w-[36px] h-[36px] flex items-center justify-center text-white bg-transparent border-none cursor-pointer hover:bg-white/20 text-sm"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estimating Cost Panel -->
+  <div class="w-[380px] min-w-[380px] h-full flex flex-col bg-white shrink-0" style="border-left:1px solid #DAD8D7">
+    <div class="flex" style="border-bottom:1px solid #DAD8D7">
+      <div class="flex-1 text-center py-2.5 cursor-pointer" style="font-size:13px;font-weight:400;color:#495565" id="cost-tab-catalog" onclick="switchCostTab('catalog')">Catalog</div>
+      <div class="flex-1 text-center py-2.5 cursor-pointer" style="font-size:13px;font-weight:700;color:#1C1E21;border-bottom:3px solid #0C79A8" id="cost-tab-cost" onclick="switchCostTab('cost')">Cost</div>
+    </div>
+
+    <div id="cost-content-catalog" style="display:none" class="flex-1 flex items-center justify-center">
+      <span style="font-size:13px;color:#88888E">Catalog content here</span>
+    </div>
+
+    <div id="cost-content-cost" class="flex-1 flex flex-col overflow-hidden">
+      <div class="px-4 pt-3 pb-1" style="font-size:12px;color:#495565">Level 2 — Interior</div>
+
+      <div class="flex-1 overflow-y-auto px-4">
+        <table class="w-full" style="border-collapse:collapse">
+          <thead>
+            <tr>
+              <th style="font-size:11px;text-transform:uppercase;color:#495565;font-weight:700;text-align:left;padding:8px 0;border-bottom:1px solid #DAD8D7">Item</th>
+              <th style="font-size:11px;text-transform:uppercase;color:#495565;font-weight:700;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">Qty</th>
+              <th style="font-size:11px;text-transform:uppercase;color:#495565;font-weight:700;text-align:left;padding:8px 4px;border-bottom:1px solid #DAD8D7">Unit</th>
+              <th style="font-size:11px;text-transform:uppercase;color:#495565;font-weight:700;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">Unit $</th>
+              <th style="font-size:11px;text-transform:uppercase;color:#495565;font-weight:700;text-align:right;padding:8px 0;border-bottom:1px solid #DAD8D7">Ext Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-size:13px;color:#1C1E21;padding:8px 0;border-bottom:1px solid #DAD8D7">5/8 Drywall Board</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">47</td><td style="font-size:13px;color:#1C1E21;padding:8px 4px;border-bottom:1px solid #DAD8D7">SF</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">$0.52</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 0;border-bottom:1px solid #DAD8D7">$24.44</td></tr>
+            <tr><td style="font-size:13px;color:#1C1E21;padding:8px 0;border-bottom:1px solid #DAD8D7">Metal Stud 3-5/8</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">14</td><td style="font-size:13px;color:#1C1E21;padding:8px 4px;border-bottom:1px solid #DAD8D7">EA</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">$3.85</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 0;border-bottom:1px solid #DAD8D7">$53.90</td></tr>
+            <tr><td style="font-size:13px;color:#1C1E21;padding:8px 0;border-bottom:1px solid #DAD8D7">Joint Compound</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">2</td><td style="font-size:13px;color:#1C1E21;padding:8px 4px;border-bottom:1px solid #DAD8D7">GAL</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">$12.50</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 0;border-bottom:1px solid #DAD8D7">$25.00</td></tr>
+            <tr><td style="font-size:13px;color:#1C1E21;padding:8px 0;border-bottom:1px solid #DAD8D7">Drywall Tape</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">1</td><td style="font-size:13px;color:#1C1E21;padding:8px 4px;border-bottom:1px solid #DAD8D7">RL</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">$4.75</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 0;border-bottom:1px solid #DAD8D7">$4.75</td></tr>
+            <tr><td style="font-size:13px;color:#1C1E21;padding:8px 0;border-bottom:1px solid #DAD8D7">Screws 1-5/8</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">2</td><td style="font-size:13px;color:#1C1E21;padding:8px 4px;border-bottom:1px solid #DAD8D7">BX</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">$8.50</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 0;border-bottom:1px solid #DAD8D7">$17.00</td></tr>
+            <tr><td style="font-size:13px;color:#1C1E21;padding:8px 0;border-bottom:1px solid #DAD8D7">Labor — Hang</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">47</td><td style="font-size:13px;color:#1C1E21;padding:8px 4px;border-bottom:1px solid #DAD8D7">SF</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">$1.10</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 0;border-bottom:1px solid #DAD8D7">$51.70</td></tr>
+            <tr><td style="font-size:13px;color:#1C1E21;padding:8px 0;border-bottom:1px solid #DAD8D7">Labor — Finish</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">47</td><td style="font-size:13px;color:#1C1E21;padding:8px 4px;border-bottom:1px solid #DAD8D7">SF</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 4px;border-bottom:1px solid #DAD8D7">$0.85</td><td style="font-size:13px;color:#1C1E21;text-align:right;padding:8px 0;border-bottom:1px solid #DAD8D7">$39.95</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="border-top:2px solid #DAD8D7" class="px-4 py-3 flex-shrink-0">
+        <div class="flex items-center justify-end gap-4 mb-1">
+          <span style="font-size:13px;font-weight:700;color:#1C1E21">Page Subtotal</span>
+          <span style="font-size:13px;font-weight:700;color:#1C1E21">$216.74</span>
+        </div>
+        <div class="flex items-center justify-end gap-4 mb-2">
+          <span style="font-size:14px;font-weight:700;color:#0C79A8">Project Total</span>
+          <span style="font-size:14px;font-weight:700;color:#0C79A8">$48,392.00</span>
+        </div>
+        <div class="flex justify-end mb-3">
+          <a href="#" style="font-size:12px;color:#0C79A8;text-decoration:none" onclick="event.preventDefault();handleSummaryNav()">View Full Summary</a>
+        </div>
+        <button style="width:100%;background:#fff;border:1px solid #DAD8D7;border-radius:4px;padding:8px 0;font-size:13px;color:#0C79A8;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:500;display:flex;align-items:center;justify-content:center;gap:6px" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background='#fff'">
+          <i class="fa-solid fa-file-excel"></i> Send to Excel
+        </button>
       </div>
     </div>
   </div>
@@ -758,7 +814,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
         </thead>
         <tbody>
           <!-- Condition Group 1 -->
-          <tr style="background:var(--primary-100)">
+          <tr style="background:#F4F4F4">
             <td colspan="6" class="px-2.5 py-3 text-sm font-bold text-body-dark">Wall Type Q2 @ 13' — Level 2 Interior</td>
           </tr>
           <tr class="table-row"><td class="table-cell"></td><td class="table-cell">5/8 Drywall Board</td><td class="table-cell text-right">47</td><td class="table-cell">SF</td><td class="table-cell text-right">$0.52</td><td class="table-cell text-right">$24.44</td></tr>
@@ -774,7 +830,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
           </tr>
 
           <!-- Condition Group 2 -->
-          <tr style="background:var(--primary-100)">
+          <tr style="background:#F4F4F4">
             <td colspan="6" class="px-2.5 py-3 text-sm font-bold text-body-dark">ACT 1 — 24 X 24 — Level 2 Interior</td>
           </tr>
           <tr class="table-row"><td class="table-cell"></td><td class="table-cell">ACT Panel 24x24</td><td class="table-cell text-right">120</td><td class="table-cell">SF</td><td class="table-cell text-right">$1.85</td><td class="table-cell text-right">$222.00</td></tr>
@@ -1340,8 +1396,34 @@ function handleSummaryNav() {
     const p = state.selectedProject;
     document.getElementById('summary-project-name').textContent = p.name;
     document.getElementById('summary-project-subtitle').textContent =
-      p.number + ' · ' + p.assigned + ' · ' + p.bidDate + ' · ' + p.location;
+      p.number + ' | Assigned to: ' + p.assigned + ' | Bid: ' + p.bidDate.split(' - ')[0] + ' | ' + p.location;
     showScreen('summary');
+  }
+}
+
+function switchCostTab(tab) {
+  var catalogTab = document.getElementById('cost-tab-catalog');
+  var costTab = document.getElementById('cost-tab-cost');
+  var catalogContent = document.getElementById('cost-content-catalog');
+  var costContent = document.getElementById('cost-content-cost');
+  if (tab === 'catalog') {
+    catalogTab.style.fontWeight = '700';
+    catalogTab.style.color = '#1C1E21';
+    catalogTab.style.borderBottom = '3px solid #0C79A8';
+    costTab.style.fontWeight = '400';
+    costTab.style.color = '#495565';
+    costTab.style.borderBottom = 'none';
+    catalogContent.style.display = 'flex';
+    costContent.style.display = 'none';
+  } else {
+    costTab.style.fontWeight = '700';
+    costTab.style.color = '#1C1E21';
+    costTab.style.borderBottom = '3px solid #0C79A8';
+    catalogTab.style.fontWeight = '400';
+    catalogTab.style.color = '#495565';
+    catalogTab.style.borderBottom = 'none';
+    costContent.style.display = 'flex';
+    catalogContent.style.display = 'none';
   }
 }
 
