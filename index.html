@@ -656,9 +656,8 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
 
     <!-- Tab bar (hidden in empty state, shown via JS) -->
     <div id="ep-tab-bar" class="flex items-center" style="border-bottom:1px solid var(--neutral-300)">
-      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:700;color:var(--neutral-600);border-bottom:3px solid var(--primary-500)" id="cost-tab-catalog" onclick="switchCostTab('catalog')">Catalog</div>
-      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:400;color:var(--neutral-500)" id="cost-tab-cost" onclick="switchCostTab('cost')">Cost</div>
-      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:400;color:var(--neutral-500)" id="cost-tab-summary" onclick="switchCostTab('summary')">Summary</div>
+      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:400;color:var(--neutral-500)" id="cost-tab-catalog" onclick="switchCostTab('catalog')">Catalog</div>
+      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:700;color:var(--neutral-600);border-bottom:3px solid var(--primary-500)" id="cost-tab-cost" onclick="switchCostTab('cost')">Cost</div>
       <div class="flex items-center gap-1 flex-shrink-0" style="padding:0 8px">
         <button class="w-[26px] h-[26px] rounded flex items-center justify-center text-xs hover:bg-gray-100 border-none bg-transparent cursor-pointer" style="color:var(--neutral-400)" title="Open in new tab"><i class="fa-solid fa-up-right-from-square"></i></button>
         <button class="w-[26px] h-[26px] rounded flex items-center justify-center text-xs hover:bg-gray-100 border-none bg-transparent cursor-pointer" style="color:var(--neutral-400)" title="Close panel" onclick="toggleEstimatingPanel()"><i class="fa-solid fa-chevron-right"></i></button>
@@ -684,8 +683,6 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
     <!-- TAB 2: COST (dynamically rendered by renderCostTab) -->
     <div id="cost-content-cost" style="display:none" class="flex-1 flex flex-col overflow-hidden"></div>
 
-    <!-- TAB 3: SUMMARY (dynamically rendered by renderSummaryTab) -->
-    <div id="cost-content-summary" style="display:none" class="flex-1 flex flex-col overflow-hidden"></div>
   </div>
   </div>
 
@@ -1453,7 +1450,7 @@ function handleSummaryNav() {
 }
 
 function switchCostTab(tab, contextMeasurementId) {
-  var tabs = ['catalog', 'cost', 'summary'];
+  var tabs = ['catalog', 'cost'];
   tabs.forEach(function(t) {
     var tabEl = document.getElementById('cost-tab-' + t);
     var contentEl = document.getElementById('cost-content-' + t);
@@ -1472,7 +1469,6 @@ function switchCostTab(tab, contextMeasurementId) {
   });
   if (tab === 'catalog') renderCatalogTab(contextMeasurementId || null);
   if (tab === 'cost') renderCostTab();
-  if (tab === 'summary') renderSummaryTab();
 }
 
 function fmt(n) {
@@ -1490,7 +1486,6 @@ function renderEstimatingPanel() {
   var tabBar = document.getElementById('ep-tab-bar');
   var catalogEl = document.getElementById('cost-content-catalog');
   var costEl = document.getElementById('cost-content-cost');
-  var summaryEl = document.getElementById('cost-content-summary');
 
   // Hide all first
   if (emptyEl) emptyEl.style.display = 'none';
@@ -1498,7 +1493,6 @@ function renderEstimatingPanel() {
   if (tabBar) tabBar.style.display = 'none';
   if (catalogEl) catalogEl.style.display = 'none';
   if (costEl) costEl.style.display = 'none';
-  if (summaryEl) summaryEl.style.display = 'none';
 
   if (!hasMeasurements) {
     if (emptyEl) emptyEl.style.display = 'flex';
