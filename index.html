@@ -345,7 +345,10 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
   width: 60px; height: 28px; border: 1px solid var(--neutral-300); border-radius: 4px;
   padding: 0 6px; font-family: 'Montserrat', sans-serif; font-size: 12px;
   text-align: right; color: var(--neutral-600); outline: none;
+  transition: border-color var(--input-field-transition), box-shadow var(--input-field-transition);
 }
+.num-input:hover { border-color: var(--input-field-border-hover); }
+.num-input:focus { border-color: var(--primary-500); box-shadow: var(--button-focus-shadow); }
 .section-header {
   font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
 }
@@ -647,7 +650,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
         <p style="font-size:13px;color:var(--neutral-500);line-height:1.5;margin:0 0 24px">This is a wall-type measurement. Set the height so quantities can be converted from linear feet to square feet for pricing.</p>
         <label style="display:block;font-size:13px;font-weight:600;color:var(--neutral-600);margin-bottom:8px" for="height-input">Wall Height</label>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
-          <input id="height-input" type="number" step="0.5" min="1" max="30" placeholder="e.g. 9" style="flex:1;height:40px;border:1px solid var(--neutral-300);border-radius:6px;padding:0 12px;font-family:'Montserrat',sans-serif;font-size:14px;color:var(--neutral-600);outline:none">
+          <input id="height-input" type="number" step="0.5" min="1" max="30" placeholder="e.g. 9" class="input-field" style="flex:1;height:40px;border-radius:6px;padding:0 12px;font-size:14px">
           <span style="font-size:13px;font-weight:500;color:var(--neutral-500)">ft</span>
         </div>
         <div style="display:flex;gap:8px;margin-bottom:8px">
@@ -1449,7 +1452,14 @@ function setHeightQuick(val) {
 function confirmHeight() {
   var input = document.getElementById('height-input');
   var val = parseFloat(input ? input.value : 0);
-  if (!val || val <= 0) return;
+  if (!val || val <= 0 || val > 30) {
+    if (input) {
+      input.style.borderColor = 'var(--status-error)';
+      input.style.boxShadow = '0 0 0 2px rgba(211,47,47,0.15)';
+      setTimeout(function() { input.style.borderColor = ''; input.style.boxShadow = ''; }, 2000);
+    }
+    return;
+  }
   var m = state.measurements.find(function(x) { return x.id === _heightPromptMeasurementId; });
   if (m) m.height = val;
   closeBlueprintModal('modal-height-prompt');
@@ -1720,7 +1730,7 @@ function renderCostTab() {
       html += '</div>';
       html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">';
       html += '<div style="display:flex;align-items:center;gap:4px"><span style="font-size:12px;color:var(--neutral-500)">' + item.adjQty + ' ' + item.unit + '</span><span style="font-size:10px;color:var(--neutral-400);cursor:help" title="' + wasteInfo + '">ⓘ</span></div>';
-      html += '<input type="number" step="0.01" value="' + item.unitCost.toFixed(2) + '" class="num-input">';
+      html += '<input type="number" step="0.01" min="0" value="' + item.unitCost.toFixed(2) + '" class="num-input" onchange="if(parseFloat(this.value)<0){this.value=\'0.00\';this.style.borderColor=\'var(--status-error)\';var s=this;setTimeout(function(){s.style.borderColor=\'\'},1500)}">';
       html += '</div>';
       html += '</div>';
     });
@@ -1749,7 +1759,7 @@ function renderCostTab() {
   html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">';
   html += '<span style="font-size:13px;font-weight:500;color:var(--neutral-500)">Markup</span>';
   html += '<div style="display:flex;align-items:center;gap:4px">';
-  html += '<input type="number" id="cost-markup-input" value="' + markupPct + '" oninput="recalcCostMarkup()" class="num-input">';
+  html += '<input type="number" id="cost-markup-input" min="0" value="' + markupPct + '" oninput="recalcCostMarkup()" class="num-input" onchange="if(parseFloat(this.value)<0){this.value=\'0\';this.style.borderColor=\'var(--status-error)\';var s=this;setTimeout(function(){s.style.borderColor=\'\'},1500);recalcCostMarkup()}">';
   html += '<span style="font-size:12px;color:var(--neutral-400)">%</span>';
   html += '</div>';
   html += '</div>';
