@@ -674,9 +674,6 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
       <button class="btn-secondary" style="font-size:13px" onclick="toggleEstimatingPanel()">Close Panel</button>
     </div>
 
-    <!-- STATE 2: UNPRICED MEASUREMENTS -->
-    <div id="ep-unpriced" style="display:none" class="flex-1 overflow-y-auto"></div>
-
     <!-- TAB 1: CATALOG (dynamically rendered by renderCatalogTab) -->
     <div id="cost-content-catalog" style="display:none" class="flex-1 flex flex-col overflow-hidden"></div>
 
@@ -1482,14 +1479,11 @@ function renderEstimatingPanel() {
   var hasPriced = hasMeasurements && state.measurements.some(function(m) { return m.pricedItems && m.pricedItems.length > 0; });
 
   var emptyEl = document.getElementById('ep-empty-state');
-  var unpricedEl = document.getElementById('ep-unpriced');
   var tabBar = document.getElementById('ep-tab-bar');
   var catalogEl = document.getElementById('cost-content-catalog');
   var costEl = document.getElementById('cost-content-cost');
 
-  // Hide all first
   if (emptyEl) emptyEl.style.display = 'none';
-  if (unpricedEl) unpricedEl.style.display = 'none';
   if (tabBar) tabBar.style.display = 'none';
   if (catalogEl) catalogEl.style.display = 'none';
   if (costEl) costEl.style.display = 'none';
@@ -1502,52 +1496,10 @@ function renderEstimatingPanel() {
   if (tabBar) tabBar.style.display = 'flex';
 
   if (hasUnpriced && !hasPriced) {
-    renderUnpricedMeasurements();
-    if (unpricedEl) unpricedEl.style.display = 'flex';
     switchCostTab('catalog');
   } else {
     switchCostTab('cost');
   }
-
-  if (hasUnpriced) {
-    renderUnpricedMeasurements();
-    if (unpricedEl) unpricedEl.style.display = 'flex';
-  }
-}
-
-// ===================== STATE 2: UNPRICED MEASUREMENTS =====================
-function renderUnpricedMeasurements() {
-  var container = document.getElementById('ep-unpriced');
-  if (!container) return;
-  var unpriced = state.measurements.filter(function(m) { return !m.pricedItems || m.pricedItems.length === 0; });
-  if (unpriced.length === 0) { container.innerHTML = ''; return; }
-
-  var html = '<div style="padding:16px"><div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--neutral-400);letter-spacing:0.05em;margin-bottom:16px">Unpriced Measurements (' + unpriced.length + ')</div>';
-  unpriced.forEach(function(m) {
-    var qtyLabel = m.quantity + ' ' + m.unit;
-    if (m.type === 'wall' && m.height) qtyLabel += ' × ' + m.height + ' ft';
-    var needsHeight = m.type === 'wall' && !m.height;
-    html += '<div style="background:var(--neutral-100);border-radius:8px;padding:16px;margin-bottom:12px">';
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">';
-    html += '<span style="font-size:14px;font-weight:600;color:var(--neutral-600)">' + m.name + '</span>';
-    html += '<span style="font-size:12px;font-weight:600;color:var(--neutral-500);background:var(--neutral-200);padding:2px 10px;border-radius:10px">' + qtyLabel + '</span>';
-    html += '</div>';
-    if (needsHeight) {
-      html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;padding:8px 12px;background:#FFF8E1;border-radius:6px;border:1px solid #FFE082">';
-      html += '<i class="fa-solid fa-triangle-exclamation" style="font-size:12px;color:#F5A623"></i>';
-      html += '<span style="font-size:12px;color:#8B6914">Height required for pricing</span>';
-      html += '<button class="btn-link" style="margin-left:auto;padding:0;height:auto;font-size:12px" onclick="openHeightPrompt(\'' + m.id + '\')">Set height</button>';
-      html += '</div>';
-    }
-    html += '<div style="position:relative">';
-    html += '<i class="fa-solid fa-magnifying-glass" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--neutral-400);font-size:12px"></i>';
-    var disabledAttr = needsHeight ? 'disabled style="width:100%;height:36px;border:1px solid var(--neutral-300);border-radius:6px;padding:0 12px 0 32px;font-family:\'Montserrat\',sans-serif;font-size:13px;color:var(--neutral-600);outline:none;background:var(--neutral-200);cursor:not-allowed;opacity:0.6"' : 'onclick="openCatalogForMeasurement(\'' + m.id + '\')" readonly style="width:100%;height:36px;border:1px solid var(--neutral-300);border-radius:6px;padding:0 12px 0 32px;font-family:\'Montserrat\',sans-serif;font-size:13px;color:var(--neutral-600);outline:none;background:var(--neutral-0,#fff);cursor:pointer"';
-    html += '<input type="text" placeholder="Search assemblies to apply..." ' + disabledAttr + '>';
-    html += '</div>';
-    html += '</div>';
-  });
-  html += '</div>';
-  container.innerHTML = html;
 }
 
 // ===================== STATE 3: HEIGHT PROMPT =====================
@@ -1606,7 +1558,28 @@ function renderCatalogTab(contextMeasurementId) {
 
   var contextMode = !!contextMeasurementId;
   var m = contextMode ? state.measurements.find(function(x) { return x.id === contextMeasurementId; }) : null;
+  var unpriced = state.measurements.filter(function(x) { return !x.pricedItems || x.pricedItems.length === 0; });
   var html = '';
+
+  if (unpriced.length > 0 && !contextMode) {
+    html += '<div style="padding:12px 16px 0">';
+    html += '<div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--neutral-400);letter-spacing:0.05em;margin-bottom:8px">Unpriced Measurements (' + unpriced.length + ')</div>';
+    unpriced.forEach(function(um) {
+      var qtyLabel = um.quantity + ' ' + um.unit;
+      if (um.type === 'wall' && um.height) qtyLabel += ' × ' + um.height + ' ft';
+      var needsHeight = um.type === 'wall' && !um.height;
+      var isClickable = !needsHeight;
+      html += '<div style="display:flex;align-items:center;gap:8px;padding:8px 0;' + (isClickable ? 'cursor:pointer' : '') + '"' + (isClickable ? ' onclick="openCatalogForMeasurement(\'' + um.id + '\')"' : '') + '>';
+      html += '<span style="font-size:13px;font-weight:500;color:var(--neutral-600);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + um.name + '</span>';
+      if (needsHeight) {
+        html += '<span style="font-size:11px;color:#8B6914;white-space:nowrap;display:flex;align-items:center;gap:4px"><i class="fa-solid fa-triangle-exclamation" style="font-size:10px;color:#F5A623"></i> <button class="btn-link" style="padding:0;height:auto;font-size:11px" onclick="event.stopPropagation();openHeightPrompt(\'' + um.id + '\')">Set height</button></span>';
+      }
+      html += '<span style="font-size:11px;font-weight:600;color:var(--neutral-500);background:var(--neutral-200);padding:2px 8px;border-radius:10px;white-space:nowrap">' + qtyLabel + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '<div style="margin:8px 16px 0;border-top:1px solid var(--neutral-200)"></div>';
+  }
 
   if (contextMode && m) {
     html += '<div style="padding:12px 16px;background:var(--neutral-100);border-bottom:1px solid var(--neutral-200);display:flex;align-items:center;justify-content:space-between">';
@@ -1619,7 +1592,7 @@ function renderCatalogTab(contextMeasurementId) {
     html += '</div>';
   }
 
-  html += '<div style="padding:16px 16px 8px"><div style="position:relative">';
+  html += '<div style="padding:' + (unpriced.length > 0 && !contextMode ? '12px' : '16px') + ' 16px 8px"><div style="position:relative">';
   html += '<i class="fa-solid fa-magnifying-glass" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--neutral-400);font-size:13px"></i>';
   html += '<input type="text" placeholder="Search assemblies..." style="width:100%;height:36px;border:1px solid var(--neutral-300);border-radius:6px;padding:0 12px 0 32px;font-family:\'Montserrat\',sans-serif;font-size:13px;color:var(--neutral-600);outline:none;background:var(--neutral-0,#fff)">';
   html += '</div></div>';
@@ -1706,7 +1679,7 @@ function renderCostTab() {
   var priced = state.measurements.filter(function(m) { return m.pricedItems && m.pricedItems.length > 0; });
 
   if (priced.length === 0) {
-    container.innerHTML = '<div class="flex-1 flex flex-col items-center justify-center" style="padding:32px"><i class="fa-solid fa-receipt" style="font-size:24px;color:var(--neutral-300);margin-bottom:16px"></i><p style="font-size:13px;color:var(--neutral-500);text-align:center">No priced measurements yet. Apply assemblies from the Catalog tab.</p></div>';
+    container.innerHTML = '<div class="flex-1 flex flex-col items-center justify-center" style="padding:32px"><i class="fa-solid fa-receipt" style="font-size:24px;color:var(--neutral-300);margin-bottom:16px"></i><p style="font-size:13px;color:var(--neutral-500);text-align:center">No priced measurements yet. Search the catalog to start building your bid.</p></div>';
     return;
   }
 
