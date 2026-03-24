@@ -373,7 +373,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
       <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIQSURBVHgB1ZiLccIwDIaVXgfICBmhTABswAjtBtmAdALoBGSEbsAIdAPoBLCBKoN6mGAnfmGU/04QFCun7yRjAQAJEUuyFdkRL9qSLWAMokQrsj2atQTpoiQ32C/ZEFrbKL1zRXajgdCz1HzlaCBMAOwfB4QNgO/Jh+gD4PtLRMEbe6ACK7RLBoQNwJD8WmQ79QDoatgnb0/0AKzZ3Xb8siBsAAMxciBCADhOBkQoAMcqiP1TISIBlmhWPoiIFtp0kj4+BSIEAC9Tq64Gn7UnAgFqLWyt+fNDhABwnKpCbfDnhQgFGHhmPohHAPBz80D4ANCSBXr8W4E5RnFXALz95hlMAnON4h4AjWsSmHMUjwCwJtFZ07DvMXsiEsCYBOYcxQMBgseG5BCBAOq6FQERCsC+WIh9NEQMQAwEphrFYwFCIDDlKJ4CwAcCU4/iqQBcITDxKP4KYZpaIA5kJ7KSPytoKIri838BXasz4rxGXWv+E/nndLkle7PF3ymwAr6agaN8K/EC7jpBuCrXhaoS9KYq8aO5GxuEcwtppZ+Cn34ptvUJ4Hb6hmsrKZnbybWFcgp9RnFpAOg7igsE0NWwz76xBQL4jOKzLnEJgmWA2ELHUYNwMcS1a/D+h0otuRKqbfR8C052Bx6HjSC1hXoliAouM0gF49GBbH4eJeh0Ux8mZB9we4RLlJoGvsgmKu8/pihXxSOysM0AAAAASUVORK5CYII=" style="width:22px;height:22px">
       <span class="nav-label">Take off</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="handleSummaryNav()">
       <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFWSURBVHgB7ZmBTcMwEEXPFQN0hLBBugGZpGGDMEFhAmADmCRs0GwQbwAbHN+yjYyRElM1tVPdky52k5Pya59/IofIwcxbxAHRc36OiJYClBNZoekRFZWFRjRKKe2FjlSeSM+AaIzINhr2R8SWMsG2BLtYE7l68HRUCG7APD1FyrONZIwb2R+UOfiLKFpFBRFq29BKuE6hmInaBGXgJjURAp/RdK7/gnJ+iK5XaFr6P2/G0GezwpU1kVPzX+ooZ+TTGFO0raZGk6YeUzPgT72ju3enXs25KK2hE6c+KStl6oPcO77gYmIx/AURwz83Yvhi+FOI4c/fTwx/McTwz40Yvhj+FGL48/cTw1+MdQrlwrYdw99GaLh6WyqHfdAf4p3dT7bb0rm3xg/RQ6FVTtSRyv3YoGFGtxscvsiataby0GS12cXkXgp2iHv6XbO5+EA8IXb+heUbarJN/912A7kAAAAASUVORK5CYII=" style="width:22px;height:22px">
       <span class="nav-label">Summary</span>
     </div>
@@ -435,7 +435,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
       <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIQSURBVHgB1ZiLccIwDIaVXgfICBmhTABswAjtBtmAdALoBGSEbsAIdAPoBLCBKoN6mGAnfmGU/04QFCun7yRjAQAJEUuyFdkRL9qSLWAMokQrsj2atQTpoiQ32C/ZEFrbKL1zRXajgdCz1HzlaCBMAOwfB4QNgO/Jh+gD4PtLRMEbe6ACK7RLBoQNwJD8WmQ79QDoatgnb0/0AKzZ3Xb8siBsAAMxciBCADhOBkQoAMcqiP1TISIBlmhWPoiIFtp0kj4+BSIEAC9Tq64Gn7UnAgFqLWyt+fNDhABwnKpCbfDnhQgFGHhmPohHAPBz80D4ANCSBXr8W4E5RnFXALz95hlMAnON4h4AjWsSmHMUjwCwJtFZ07DvMXsiEsCYBOYcxQMBgseG5BCBAOq6FQERCsC+WIh9NEQMQAwEphrFYwFCIDDlKJ4CwAcCU4/iqQBcITDxKP4KYZpaIA5kJ7KSPytoKIri838BXasz4rxGXWv+E/nndLkle7PF3ymwAr6agaN8K/EC7jpBuCrXhaoS9KYq8aO5GxuEcwtppZ+Cn34ptvUJ4Hb6hmsrKZnbybWFcgp9RnFpAOg7igsE0NWwz76xBQL4jOKzLnEJgmWA2ELHUYNwMcS1a/D+h0otuRKqbfR8C052Bx6HjSC1hXoliAouM0gF49GBbH4eJeh0Ux8mZB9we4RLlJoGvsgmKu8/pihXxSOysM0AAAAASUVORK5CYII=" style="width:22px;height:22px">
       <span class="nav-label">Take off</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="handleSummaryNav()">
       <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFWSURBVHgB7ZmBTcMwEEXPFQN0hLBBugGZpGGDMEFhAmADmCRs0GwQbwAbHN+yjYyRElM1tVPdky52k5Pya59/IofIwcxbxAHRc36OiJYClBNZoekRFZWFRjRKKe2FjlSeSM+AaIzINhr2R8SWMsG2BLtYE7l68HRUCG7APD1FyrONZIwb2R+UOfiLKFpFBRFq29BKuE6hmInaBGXgJjURAp/RdK7/gnJ+iK5XaFr6P2/G0GezwpU1kVPzX+ooZ+TTGFO0raZGk6YeUzPgT72ju3enXs25KK2hE6c+KStl6oPcO77gYmIx/AURwz83Yvhi+FOI4c/fTwx/McTwz40Yvhj+FGL48/cTw1+MdQrlwrYdw99GaLh6WyqHfdAf4p3dT7bb0rm3xg/RQ6FVTtSRyv3YoGFGtxscvsiataby0GS12cXkXgp2iHv6XbO5+EA8IXb+heUbarJN/912A7kAAAAASUVORK5CYII=" style="width:22px;height:22px">
       <span class="nav-label">Summary</span>
     </div>
@@ -523,7 +523,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
       <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIQSURBVHgB1ZiLccIwDIaVXgfICBmhTABswAjtBtmAdALoBGSEbsAIdAPoBLCBKoN6mGAnfmGU/04QFCun7yRjAQAJEUuyFdkRL9qSLWAMokQrsj2atQTpoiQ32C/ZEFrbKL1zRXajgdCz1HzlaCBMAOwfB4QNgO/Jh+gD4PtLRMEbe6ACK7RLBoQNwJD8WmQ79QDoatgnb0/0AKzZ3Xb8siBsAAMxciBCADhOBkQoAMcqiP1TISIBlmhWPoiIFtp0kj4+BSIEAC9Tq64Gn7UnAgFqLWyt+fNDhABwnKpCbfDnhQgFGHhmPohHAPBz80D4ANCSBXr8W4E5RnFXALz95hlMAnON4h4AjWsSmHMUjwCwJtFZ07DvMXsiEsCYBOYcxQMBgseG5BCBAOq6FQERCsC+WIh9NEQMQAwEphrFYwFCIDDlKJ4CwAcCU4/iqQBcITDxKP4KYZpaIA5kJ7KSPytoKIri838BXasz4rxGXWv+E/nndLkle7PF3ymwAr6agaN8K/EC7jpBuCrXhaoS9KYq8aO5GxuEcwtppZ+Cn34ptvUJ4Hb6hmsrKZnbybWFcgp9RnFpAOg7igsE0NWwz76xBQL4jOKzLnEJgmWA2ELHUYNwMcS1a/D+h0otuRKqbfR8C052Bx6HjSC1hXoliAouM0gF49GBbH4eJeh0Ux8mZB9we4RLlJoGvsgmKu8/pihXxSOysM0AAAAASUVORK5CYII=" style="width:22px;height:22px">
       <span class="nav-label">Takeoff</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="handleSummaryNav()">
       <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFWSURBVHgB7ZmBTcMwEEXPFQN0hLBBugGZpGGDMEFhAmADmCRs0GwQbwAbHN+yjYyRElM1tVPdky52k5Pya59/IofIwcxbxAHRc36OiJYClBNZoekRFZWFRjRKKe2FjlSeSM+AaIzINhr2R8SWMsG2BLtYE7l68HRUCG7APD1FyrONZIwb2R+UOfiLKFpFBRFq29BKuE6hmInaBGXgJjURAp/RdK7/gnJ+iK5XaFr6P2/G0GezwpU1kVPzX+ooZ+TTGFO0raZGk6YeUzPgT72ju3enXs25KK2hE6c+KStl6oPcO77gYmIx/AURwz83Yvhi+FOI4c/fTwx/McTwz40Yvhj+FGL48/cTw1+MdQrlwrYdw99GaLh6WyqHfdAf4p3dT7bb0rm3xg/RQ6FVTtSRyv3YoGFGtxscvsiataby0GS12cXkXgp2iHv6XbO5+EA8IXb+heUbarJN/912A7kAAAAASUVORK5CYII=" style="width:22px;height:22px">
       <span class="nav-label">Summary</span>
     </div>
@@ -565,7 +565,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
       <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIQSURBVHgB1ZiLccIwDIaVXgfICBmhTABswAjtBtmAdALoBGSEbsAIdAPoBLCBKoN6mGAnfmGU/04QFCun7yRjAQAJEUuyFdkRL9qSLWAMokQrsj2atQTpoiQ32C/ZEFrbKL1zRXajgdCz1HzlaCBMAOwfB4QNgO/Jh+gD4PtLRMEbe6ACK7RLBoQNwJD8WmQ79QDoatgnb0/0AKzZ3Xb8siBsAAMxciBCADhOBkQoAMcqiP1TISIBlmhWPoiIFtp0kj4+BSIEAC9Tq64Gn7UnAgFqLWyt+fNDhABwnKpCbfDnhQgFGHhmPohHAPBz80D4ANCSBXr8W4E5RnFXALz95hlMAnON4h4AjWsSmHMUjwCwJtFZ07DvMXsiEsCYBOYcxQMBgseG5BCBAOq6FQERCsC+WIh9NEQMQAwEphrFYwFCIDDlKJ4CwAcCU4/iqQBcITDxKP4KYZpaIA5kJ7KSPytoKIri838BXasz4rxGXWv+E/nndLkle7PF3ymwAr6agaN8K/EC7jpBuCrXhaoS9KYq8aO5GxuEcwtppZ+Cn34ptvUJ4Hb6hmsrKZnbybWFcgp9RnFpAOg7igsE0NWwz76xBQL4jOKzLnEJgmWA2ELHUYNwMcS1a/D+h0otuRKqbfR8C052Bx6HjSC1hXoliAouM0gF49GBbH4eJeh0Ux8mZB9we4RLlJoGvsgmKu8/pihXxSOysM0AAAAASUVORK5CYII=" style="width:22px;height:22px">
       <span class="nav-label">Takeoff</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="handleSummaryNav()">
       <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFWSURBVHgB7ZmBTcMwEEXPFQN0hLBBugGZpGGDMEFhAmADmCRs0GwQbwAbHN+yjYyRElM1tVPdky52k5Pya59/IofIwcxbxAHRc36OiJYClBNZoekRFZWFRjRKKe2FjlSeSM+AaIzINhr2R8SWMsG2BLtYE7l68HRUCG7APD1FyrONZIwb2R+UOfiLKFpFBRFq29BKuE6hmInaBGXgJjURAp/RdK7/gnJ+iK5XaFr6P2/G0GezwpU1kVPzX+ooZ+TTGFO0raZGk6YeUzPgT72ju3enXs25KK2hE6c+KStl6oPcO77gYmIx/AURwz83Yvhi+FOI4c/fTwx/McTwz40Yvhj+FGL48/cTw1+MdQrlwrYdw99GaLh6WyqHfdAf4p3dT7bb0rm3xg/RQ6FVTtSRyv3YoGFGtxscvsiataby0GS12cXkXgp2iHv6XbO5+EA8IXb+heUbarJN/912A7kAAAAASUVORK5CYII=" style="width:22px;height:22px">
       <span class="nav-label">Summary</span>
     </div>
@@ -670,6 +670,150 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
         <button class="w-[36px] h-[36px] flex items-center justify-center text-white bg-transparent border-none cursor-pointer hover:bg-white/20 text-sm"><i class="fa-solid fa-chevron-left"></i></button>
         <span class="px-3 text-sm font-medium text-white" id="takeoff-page-indicator">3 of 21</span>
         <button class="w-[36px] h-[36px] flex items-center justify-center text-white bg-transparent border-none cursor-pointer hover:bg-white/20 text-sm"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SCREEN: SUMMARY NO PROJECT ================= -->
+<div id="screen-summary-no-project" class="screen">
+  <nav class="w-[77px] min-w-[77px] h-full flex flex-col items-center py-3 gap-2.5" style="background:#185A7D">
+    <div class="w-[77px] h-[50px] flex items-center justify-center mb-2">
+      <img class="cc-logo" style="height:44px; width:auto; object-fit:contain">
+    </div>
+    <div class="nav-item" onclick="showScreen('projects')">
+      <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAwCAYAAABnjuimAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFPSURBVHgB7ZmBDYIwEAC/xgFwA0bQEZzAFXADN1BGcRJHkA1gA92gfrGYB6nB8JQn+Us+KC30QkqffAE81toE44xxszIoMc6Nn/GSKR5uGCnIo8DYN6IlyJRsyJ1k1nnkF4yE9qKNEAnv8ZkG7sSdnDgFLoou2h3XdAbfGGOefRc0v7HdQCTouCva0CcphRUsBBXlRkW5GS3q0q/Py2Mo7TuNTyeKZDA+/ab+PmGGZJ1ffaZ8orRDKzOFss6QPlNAx9W3nhsV5UYXfI7liVUUdMHXBX9aVJQbFeVGRblRUW5UdCyWlMWRat1pdPXRA8YWIwncIGqN1HM1Mw38D3UNX/oczcFtNLi6bc+34VcNPyZUJNhgAzX8mAwVne1J9vnQ84taRwvyPwOp2PbG08PNU4kvk/FSd5C9xXhZwqZtTf0y4YJa4WGHcYT2nJVC/gLjFCh1F17AogAAAABJRU5ErkJggg==" style="width:22px;height:22px">
+      <span class="nav-label">Projects</span>
+    </div>
+    <div class="nav-item" onclick="handleTakeoffNav()">
+      <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIQSURBVHgB1ZiLccIwDIaVXgfICBmhTABswAjtBtmAdALoBGSEbsAIdAPoBLCBKoN6mGAnfmGU/04QFCun7yRjAQAJEUuyFdkRL9qSLWAMokQrsj2atQTpoiQ32C/ZEFrbKL1zRXajgdCz1HzlaCBMAOwfB4QNgO/Jh+gD4PtLRMEbe6ACK7RLBoQNwJD8WmQ79QDoatgnb0/0AKzZ3Xb8siBsAAMxciBCADhOBkQoAMcqiP1TISIBlmhWPoiIFtp0kj4+BSIEAC9Tq64Gn7UnAgFqLWyt+fNDhABwnKpCbfDnhQgFGHhmPohHAPBz80D4ANCSBXr8W4E5RnFXALz95hlMAnON4h4AjWsSmHMUjwCwJtFZ07DvMXsiEsCYBOYcxQMBgseG5BCBAOq6FQERCsC+WIh9NEQMQAwEphrFYwFCIDDlKJ4CwAcCU4/iqQBcITDxKP4KYZpaIA5kJ7KSPytoKIri838BXasz4rxGXWv+E/nndLkle7PF3ymwAr6agaN8K/EC7jpBuCrXhaoS9KYq8aO5GxuEcwtppZ+Cn34ptvUJ4Hb6hmsrKZnbybWFcgp9RnFpAOg7igsE0NWwz76xBQL4jOKzLnEJgmWA2ELHUYNwMcS1a/D+h0otuRKqbfR8C052Bx6HjSC1hXoliAouM0gF49GBbH4eJeh0Ux8mZB9we4RLlJoGvsgmKu8/pihXxSOysM0AAAAASUVORK5CYII=" style="width:22px;height:22px">
+      <span class="nav-label">Take off</span>
+    </div>
+    <div class="nav-item selected" onclick="handleSummaryNav()">
+      <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFWSURBVHgB7ZmBTcMwEEXPFQN0hLBBugGZpGGDMEFhAmADmCRs0GwQbwAbHN+yjYyRElM1tVPdky52k5Pya59/IofIwcxbxAHRc36OiJYClBNZoekRFZWFRjRKKe2FjlSeSM+AaIzINhr2R8SWMsG2BLtYE7l68HRUCG7APD1FyrONZIwb2R+UOfiLKFpFBRFq29BKuE6hmInaBGXgJjURAp/RdK7/gnJ+iK5XaFr6P2/G0GezwpU1kVPzX+ooZ+TTGFO0raZGk6YeUzPgT72ju3enXs25KK2hE6c+KStl6oPcO77gYmIx/AURwz83Yvhi+FOI4c/fTwx/McTwz40Yvhj+FGL48/cTw1+MdQrlwrYdw99GaLh6WyqHfdAf4p3dT7bb0rm3xg/RQ6FVTtSRyv3YoGFGtxscvsiataby0GS12cXkXgp2iHv6XbO5+EA8IXb+heUbarJN/912A7kAAAAASUVORK5CYII=" style="width:22px;height:22px">
+      <span class="nav-label">Summary</span>
+    </div>
+    <div class="nav-item">
+      <i class="fa-solid fa-gear nav-icon"></i>
+      <span class="nav-label">Settings</span>
+    </div>
+  </nav>
+  <div class="flex-1 flex flex-col items-center justify-center h-full bg-white">
+    <p class="text-lg font-medium text-secondary-text mb-6">Select a project to view the bid summary</p>
+    <button class="btn-primary" onclick="showScreen('projects')">
+      <i class="fa-solid fa-arrow-left text-sm"></i> Back to Projects
+    </button>
+  </div>
+</div>
+
+<!-- ================= SCREEN: SUMMARY WITH PROJECT ================= -->
+<div id="screen-summary" class="screen">
+  <nav class="w-[77px] min-w-[77px] h-full flex flex-col items-center py-3 gap-2.5" style="background:#185A7D">
+    <div class="w-[77px] h-[50px] flex items-center justify-center mb-2">
+      <img class="cc-logo" style="height:44px; width:auto; object-fit:contain">
+    </div>
+    <div class="nav-item" onclick="showScreen('projects')">
+      <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAwCAYAAABnjuimAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFPSURBVHgB7ZmBDYIwEAC/xgFwA0bQEZzAFXADN1BGcRJHkA1gA92gfrGYB6nB8JQn+Us+KC30QkqffAE81toE44xxszIoMc6Nn/GSKR5uGCnIo8DYN6IlyJRsyJ1k1nnkF4yE9qKNEAnv8ZkG7sSdnDgFLoou2h3XdAbfGGOefRc0v7HdQCTouCva0CcphRUsBBXlRkW5GS3q0q/Py2Mo7TuNTyeKZDA+/ab+PmGGZJ1ffaZ8orRDKzOFss6QPlNAx9W3nhsV5UYXfI7liVUUdMHXBX9aVJQbFeVGRblRUW5UdCyWlMWRat1pdPXRA8YWIwncIGqN1HM1Mw38D3UNX/oczcFtNLi6bc+34VcNPyZUJNhgAzX8mAwVne1J9vnQ84taRwvyPwOp2PbG08PNU4kvk/FSd5C9xXhZwqZtTf0y4YJa4WGHcYT2nJVC/gLjFCh1F17AogAAAABJRU5ErkJggg==" style="width:22px;height:22px">
+      <span class="nav-label">Projects</span>
+    </div>
+    <div class="nav-item" onclick="handleTakeoffNav()">
+      <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIQSURBVHgB1ZiLccIwDIaVXgfICBmhTABswAjtBtmAdALoBGSEbsAIdAPoBLCBKoN6mGAnfmGU/04QFCun7yRjAQAJEUuyFdkRL9qSLWAMokQrsj2atQTpoiQ32C/ZEFrbKL1zRXajgdCz1HzlaCBMAOwfB4QNgO/Jh+gD4PtLRMEbe6ACK7RLBoQNwJD8WmQ79QDoatgnb0/0AKzZ3Xb8siBsAAMxciBCADhOBkQoAMcqiP1TISIBlmhWPoiIFtp0kj4+BSIEAC9Tq64Gn7UnAgFqLWyt+fNDhABwnKpCbfDnhQgFGHhmPohHAPBz80D4ANCSBXr8W4E5RnFXALz95hlMAnON4h4AjWsSmHMUjwCwJtFZ07DvMXsiEsCYBOYcxQMBgseG5BCBAOq6FQERCsC+WIh9NEQMQAwEphrFYwFCIDDlKJ4CwAcCU4/iqQBcITDxKP4KYZpaIA5kJ7KSPytoKIri838BXasz4rxGXWv+E/nndLkle7PF3ymwAr6agaN8K/EC7jpBuCrXhaoS9KYq8aO5GxuEcwtppZ+Cn34ptvUJ4Hb6hmsrKZnbybWFcgp9RnFpAOg7igsE0NWwz76xBQL4jOKzLnEJgmWA2ELHUYNwMcS1a/D+h0otuRKqbfR8C052Bx6HjSC1hXoliAouM0gF49GBbH4eJeh0Ux8mZB9we4RLlJoGvsgmKu8/pihXxSOysM0AAAAASUVORK5CYII=" style="width:22px;height:22px">
+      <span class="nav-label">Take off</span>
+    </div>
+    <div class="nav-item selected" onclick="handleSummaryNav()">
+      <img class="nav-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFWSURBVHgB7ZmBTcMwEEXPFQN0hLBBugGZpGGDMEFhAmADmCRs0GwQbwAbHN+yjYyRElM1tVPdky52k5Pya59/IofIwcxbxAHRc36OiJYClBNZoekRFZWFRjRKKe2FjlSeSM+AaIzINhr2R8SWMsG2BLtYE7l68HRUCG7APD1FyrONZIwb2R+UOfiLKFpFBRFq29BKuE6hmInaBGXgJjURAp/RdK7/gnJ+iK5XaFr6P2/G0GezwpU1kVPzX+ooZ+TTGFO0raZGk6YeUzPgT72ju3enXs25KK2hE6c+KStl6oPcO77gYmIx/AURwz83Yvhi+FOI4c/fTwx/McTwz40Yvhj+FGL48/cTw1+MdQrlwrYdw99GaLh6WyqHfdAf4p3dT7bb0rm3xg/RQ6FVTtSRyv3YoGFGtxscvsiataby0GS12cXkXgp2iHv6XbO5+EA8IXb+heUbarJN/912A7kAAAAASUVORK5CYII=" style="width:22px;height:22px">
+      <span class="nav-label">Summary</span>
+    </div>
+    <div class="nav-item">
+      <i class="fa-solid fa-gear nav-icon"></i>
+      <span class="nav-label">Settings</span>
+    </div>
+  </nav>
+
+  <div class="flex-1 flex flex-col h-full overflow-hidden" style="padding: 28px 88px 28px 88px;">
+    <!-- Header -->
+    <div class="flex items-start justify-between mb-6">
+      <div>
+        <h2 class="text-lg font-bold text-body-dark" id="summary-project-name"></h2>
+        <p class="text-[13px] font-normal text-secondary-text mt-1" id="summary-project-subtitle"></p>
+      </div>
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <button class="btn-secondary">Export to Vendor</button>
+        <button class="btn-primary">Export Proposal</button>
+      </div>
+    </div>
+
+    <!-- Scrollable table area -->
+    <div class="flex-1 overflow-y-auto mb-4">
+      <table class="w-full" id="summary-table">
+        <thead>
+          <tr class="border-b-2 border-body-dark">
+            <th class="table-header text-left p-2.5">Condition</th>
+            <th class="table-header text-left p-2.5">Item</th>
+            <th class="table-header text-right p-2.5 w-[80px]">Qty</th>
+            <th class="table-header text-left p-2.5 w-[60px]">Unit</th>
+            <th class="table-header text-right p-2.5 w-[100px]">Unit $</th>
+            <th class="table-header text-right p-2.5 w-[120px]">Ext Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Condition Group 1 -->
+          <tr style="background:var(--primary-100)">
+            <td colspan="6" class="px-2.5 py-3 text-sm font-bold text-body-dark">Wall Type Q2 @ 13' — Level 2 Interior</td>
+          </tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">5/8 Drywall Board</td><td class="table-cell text-right">47</td><td class="table-cell">SF</td><td class="table-cell text-right">$0.52</td><td class="table-cell text-right">$24.44</td></tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Metal Stud 3-5/8</td><td class="table-cell text-right">14</td><td class="table-cell">EA</td><td class="table-cell text-right">$3.85</td><td class="table-cell text-right">$53.90</td></tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Joint Compound</td><td class="table-cell text-right">2</td><td class="table-cell">GAL</td><td class="table-cell text-right">$12.50</td><td class="table-cell text-right">$25.00</td></tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Drywall Tape</td><td class="table-cell text-right">1</td><td class="table-cell">RL</td><td class="table-cell text-right">$4.75</td><td class="table-cell text-right">$4.75</td></tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Screws 1-5/8</td><td class="table-cell text-right">2</td><td class="table-cell">BX</td><td class="table-cell text-right">$8.50</td><td class="table-cell text-right">$17.00</td></tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Labor — Hang</td><td class="table-cell text-right">47</td><td class="table-cell">SF</td><td class="table-cell text-right">$1.10</td><td class="table-cell text-right">$51.70</td></tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Labor — Finish</td><td class="table-cell text-right">47</td><td class="table-cell">SF</td><td class="table-cell text-right">$0.85</td><td class="table-cell text-right">$39.95</td></tr>
+          <tr class="border-t border-border-gray">
+            <td colspan="5" class="table-cell text-right text-sm font-semibold text-body-dark">Subtotal</td>
+            <td class="table-cell text-right text-sm font-bold text-body-dark">$216.74</td>
+          </tr>
+
+          <!-- Condition Group 2 -->
+          <tr style="background:var(--primary-100)">
+            <td colspan="6" class="px-2.5 py-3 text-sm font-bold text-body-dark">ACT 1 — 24 X 24 — Level 2 Interior</td>
+          </tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">ACT Panel 24x24</td><td class="table-cell text-right">120</td><td class="table-cell">SF</td><td class="table-cell text-right">$1.85</td><td class="table-cell text-right">$222.00</td></tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Grid Main Tee 12'</td><td class="table-cell text-right">8</td><td class="table-cell">EA</td><td class="table-cell text-right">$4.50</td><td class="table-cell text-right">$36.00</td></tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Grid Cross Tee 4'</td><td class="table-cell text-right">24</td><td class="table-cell">EA</td><td class="table-cell text-right">$2.10</td><td class="table-cell text-right">$50.40</td></tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Grid Cross Tee 2'</td><td class="table-cell text-right">24</td><td class="table-cell">EA</td><td class="table-cell text-right">$1.65</td><td class="table-cell text-right">$39.60</td></tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Wall Angle 10'</td><td class="table-cell text-right">6</td><td class="table-cell">EA</td><td class="table-cell text-right">$3.20</td><td class="table-cell text-right">$19.20</td></tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Labor — Grid Install</td><td class="table-cell text-right">120</td><td class="table-cell">SF</td><td class="table-cell text-right">$0.95</td><td class="table-cell text-right">$114.00</td></tr>
+          <tr class="table-row"><td class="table-cell"></td><td class="table-cell">Labor — Tile Install</td><td class="table-cell text-right">120</td><td class="table-cell">SF</td><td class="table-cell text-right">$0.75</td><td class="table-cell text-right">$90.00</td></tr>
+          <tr class="border-t border-border-gray">
+            <td colspan="5" class="table-cell text-right text-sm font-semibold text-body-dark">Subtotal</td>
+            <td class="table-cell text-right text-sm font-bold text-body-dark">$571.20</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Totals section (outside scroll area) -->
+    <div class="border-t-2 border-body-dark pt-4 pb-2">
+      <div class="flex items-center justify-end gap-8 mb-2">
+        <span class="text-sm font-semibold text-body-dark">Cost Subtotal</span>
+        <span class="text-sm font-bold text-body-dark w-[120px] text-right">$48,392.00</span>
+      </div>
+      <div class="flex items-center justify-end gap-8 mb-2">
+        <span class="text-sm font-semibold text-body-dark">Markup</span>
+        <div class="flex items-center gap-2">
+          <input type="number" value="15" class="input-field text-right" style="width:60px;height:28px;font-size:13px" id="summary-markup-pct">
+          <span class="text-sm font-medium text-secondary-text">%</span>
+        </div>
+        <span class="text-sm font-bold text-body-dark w-[120px] text-right" id="summary-markup-val">$7,258.80</span>
+      </div>
+      <div class="flex items-center justify-end gap-8 mb-4">
+        <span class="text-[16px] font-bold" style="color:var(--primary-500)">Bid Total</span>
+        <span class="text-[16px] font-bold w-[120px] text-right" style="color:var(--primary-500)" id="summary-bid-total">$55,650.80</span>
+      </div>
+      <div class="flex justify-end">
+        <button class="btn-secondary">
+          <i class="fa-solid fa-file-excel text-sm"></i> Send to Excel
+        </button>
       </div>
     </div>
   </div>
@@ -1187,6 +1331,18 @@ function goToTakeoff() {
 function handleTakeoffNav() {
   if (!state.selectedProject) showScreen('takeoff-no-project');
   else goToTakeoff();
+}
+
+function handleSummaryNav() {
+  if (!state.selectedProject) {
+    showScreen('summary-no-project');
+  } else {
+    const p = state.selectedProject;
+    document.getElementById('summary-project-name').textContent = p.name;
+    document.getElementById('summary-project-subtitle').textContent =
+      p.number + ' · ' + p.assigned + ' · ' + p.bidDate + ' · ' + p.location;
+    showScreen('summary');
+  }
 }
 
 // ===================== TABS =====================
