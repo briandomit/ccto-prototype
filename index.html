@@ -616,8 +616,8 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
 
     <!-- Tab bar -->
     <div id="ep-tab-bar" class="flex items-center" style="border-bottom:1px solid var(--neutral-300)">
-      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:400;color:#495565" id="cost-tab-catalog" onclick="switchCostTab('catalog')">Catalog</div>
-      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:13px;font-weight:700;color:#1C1E21;border-bottom:3px solid #0C79A8" id="cost-tab-cost" onclick="switchCostTab('cost')">Cost</div>
+      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:14px;font-weight:500;color:var(--neutral-500)" id="cost-tab-catalog" onclick="switchCostTab('catalog')">Catalog</div>
+      <div class="flex-1 text-center cursor-pointer" style="padding:10px 0;font-size:14px;font-weight:600;color:var(--neutral-600);border-bottom:3px solid var(--primary-500)" id="cost-tab-cost" onclick="switchCostTab('cost')">Cost</div>
       <div class="flex items-center gap-1 flex-shrink-0" style="padding:0 8px">
         <button class="icon-btn" title="Open in new tab"><i class="fa-solid fa-up-right-from-square"></i></button>
         <button class="icon-btn" title="Close panel" onclick="toggleEstimatingPanel()"><i class="fa-solid fa-chevron-right"></i></button>
@@ -1380,12 +1380,12 @@ function switchCostTab(tab, contextMeasurementId) {
     var contentEl = document.getElementById('cost-content-' + t);
     if (!tabEl) return;
     if (t === tab) {
-      tabEl.style.fontWeight = '700';
+      tabEl.style.fontWeight = '600';
       tabEl.style.color = 'var(--neutral-600)';
       tabEl.style.borderBottom = '3px solid var(--primary-500)';
       if (contentEl) contentEl.style.display = 'flex';
     } else {
-      tabEl.style.fontWeight = '400';
+      tabEl.style.fontWeight = '500';
       tabEl.style.color = 'var(--neutral-500)';
       tabEl.style.borderBottom = 'none';
       if (contentEl) contentEl.style.display = 'none';
@@ -1680,6 +1680,14 @@ function addSampleItemToMeasurement(measurementId, type) {
   state.contextMeasurement = null;
   renderEstimatingPanel();
   switchCostTab('cost');
+  setTimeout(function() {
+    var card = document.querySelector('[data-mid="' + measurementId + '"]');
+    if (card) {
+      card.style.background = 'var(--primary-100)';
+      card.style.transition = 'background 800ms ease';
+      setTimeout(function() { card.style.background = 'transparent'; }, 1200);
+    }
+  }, 50);
 }
 
 function applyAssemblyToMeasurement(measurementId, assemblyName) {
@@ -1697,6 +1705,14 @@ function applyAssemblyToMeasurement(measurementId, assemblyName) {
   state.contextMeasurement = null;
   renderEstimatingPanel();
   switchCostTab('cost');
+  setTimeout(function() {
+    var card = document.querySelector('[data-mid="' + measurementId + '"]');
+    if (card) {
+      card.style.background = 'var(--primary-100)';
+      card.style.transition = 'background 800ms ease';
+      setTimeout(function() { card.style.background = 'transparent'; }, 1200);
+    }
+  }, 50);
 }
 
 // ===================== STATE 5: COST TAB (BID COSTED) =====================
@@ -1718,7 +1734,7 @@ function renderCostTab() {
     if (m.type === 'wall' && m.height) qtyLabel += ' × ' + m.height + ' ft';
     var conditionTotal = 0;
 
-    html += '<div style="' + (idx > 0 ? 'border-top:1px solid var(--neutral-200);' : '') + 'padding:16px 0 8px;display:flex;align-items:baseline;gap:8px">';
+    html += '<div data-mid="' + m.id + '" style="' + (idx > 0 ? 'border-top:1px solid var(--neutral-200);' : '') + 'padding:16px 0 8px;display:flex;align-items:baseline;gap:8px">';
     html += '<span style="font-size:14px;font-weight:700;color:var(--neutral-600)">' + m.name + '</span>';
     html += '<span style="font-size:10px;font-weight:500;color:var(--neutral-400)">' + qtyLabel + '</span>';
     html += '</div>';
