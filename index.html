@@ -610,67 +610,49 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
   </div>
 
   <!-- Main takeoff area -->
-  <div class="flex-1 flex flex-col h-full bg-white min-w-0 overflow-hidden">
-    <div class="relative" style="height:60px;flex-shrink:0">
-      <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.95);border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.12);padding:6px 16px;display:flex;align-items:center;gap:6px;height:44px;z-index:10">
-        <div class="flex items-center gap-1" style="color:#4A4F55">
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Select"><i class="fa-solid fa-arrow-pointer"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Pan"><i class="fa-solid fa-hand"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Undo"><i class="fa-solid fa-rotate-left"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Redo"><i class="fa-solid fa-rotate-right"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Highlight"><i class="fa-solid fa-pen"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Text"><i class="fa-solid fa-t"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Measure"><i class="fa-solid fa-ruler"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" id="btn-toggle-estimating" onclick="toggleEstimatingPanel()" title="Toggle Estimating Panel"><i class="fa-solid fa-calculator"></i></button>
+  <div class="flex-1 relative h-full min-w-0 overflow-hidden" style="background:#e8e8e8">
+    <!-- Canvas with floor plan -->
+    <div class="absolute inset-0 flex items-center justify-center" id="takeoff-canvas">
+      <img src="floor-plan.png" alt="Floor Plan" style="max-width:100%;max-height:100%;object-fit:contain">
+    </div>
+
+    <!-- Floating toolbar -->
+    <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.95);border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.12);padding:6px 16px;display:flex;align-items:center;gap:6px;height:44px;z-index:10">
+      <div class="flex items-center gap-1" style="color:#4A4F55">
+        <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Select"><i class="fa-solid fa-arrow-pointer"></i></button>
+        <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Pan"><i class="fa-solid fa-hand"></i></button>
+        <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Undo"><i class="fa-solid fa-rotate-left"></i></button>
+        <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Redo"><i class="fa-solid fa-rotate-right"></i></button>
+        <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Highlight"><i class="fa-solid fa-pen"></i></button>
+        <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Text"><i class="fa-solid fa-t"></i></button>
+        <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Measure"><i class="fa-solid fa-ruler"></i></button>
+        <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" id="btn-toggle-estimating" onclick="toggleEstimatingPanel()" title="Toggle Estimating Panel"><i class="fa-solid fa-calculator"></i></button>
+      </div>
+      <div style="width:1px;height:24px;background:#DAD8D7;margin:0 6px"></div>
+      <button style="display:flex;align-items:center;gap:6px;background:#FFF3E0;border:1.5px solid #F5A623;border-radius:6px;padding:4px 12px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#1C1E21;white-space:nowrap;height:32px" title="Set Scale">
+        1/4" = 1'-0" <i class="fa-solid fa-caret-down" style="font-size:11px;color:#F5A623;margin-left:2px"></i>
+      </button>
+      <div style="width:1px;height:24px;background:#DAD8D7;margin:0 6px"></div>
+      <div class="flex items-center gap-2">
+        <div class="flex items-center -space-x-2">
+          <div class="w-[30px] h-[30px] rounded-full flex items-center justify-center text-[11px] text-white font-bold border-2 border-white" style="background:#F5A623">A</div>
+          <div class="w-[30px] h-[30px] rounded-full flex items-center justify-center text-[11px] text-white font-bold border-2 border-white" style="background:#4CAF50">B</div>
+          <div class="w-[30px] h-[30px] rounded-full flex items-center justify-center text-[11px] text-white font-bold border-2 border-white" style="background:#E57373">C</div>
         </div>
-        <div style="width:1px;height:24px;background:#DAD8D7;margin:0 6px"></div>
-        <button style="display:flex;align-items:center;gap:6px;background:#FFF3E0;border:1.5px solid #F5A623;border-radius:6px;padding:4px 12px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#1C1E21;white-space:nowrap;height:32px" title="Set Scale">
-          1/4" = 1'-0" <i class="fa-solid fa-caret-down" style="font-size:11px;color:#F5A623;margin-left:2px"></i>
-        </button>
-        <div style="width:1px;height:24px;background:#DAD8D7;margin:0 6px"></div>
-        <div class="flex items-center gap-2">
-          <div class="flex items-center -space-x-2">
-            <div class="w-[30px] h-[30px] rounded-full flex items-center justify-center text-[11px] text-white font-bold border-2 border-white" style="background:#F5A623">A</div>
-            <div class="w-[30px] h-[30px] rounded-full flex items-center justify-center text-[11px] text-white font-bold border-2 border-white" style="background:#4CAF50">B</div>
-            <div class="w-[30px] h-[30px] rounded-full flex items-center justify-center text-[11px] text-white font-bold border-2 border-white" style="background:#E57373">C</div>
-          </div>
-          <span style="font-size:13px;font-weight:600;color:#495565">+2</span>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" style="color:#4A4F55" title="More options"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-        </div>
+        <span style="font-size:13px;font-weight:600;color:#495565">+2</span>
+        <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" style="color:#4A4F55" title="More options"><i class="fa-solid fa-ellipsis-vertical"></i></button>
       </div>
     </div>
 
-    <!-- Canvas with drawing -->
-    <div class="flex-1 relative overflow-hidden" style="background:#e8e8e8">
-      <!-- Placeholder construction drawing -->
-      <div class="absolute inset-4 bg-white rounded shadow-lg overflow-hidden flex items-center justify-center" id="takeoff-canvas">
-        <svg width="100%" height="100%" viewBox="0 0 1000 700" fill="none" stroke="#bbb" stroke-width="0.5" style="max-width:100%;max-height:100%">
-          <rect x="50" y="50" width="900" height="600" stroke="#999" stroke-width="1"/>
-          <rect x="100" y="100" width="200" height="150" /><text x="150" y="180" fill="#666" font-size="12" font-family="Montserrat">LNDRY</text>
-          <rect x="350" y="100" width="180" height="120" /><text x="400" y="165" fill="#666" font-size="12" font-family="Montserrat">STOR.</text>
-          <rect x="580" y="80" width="150" height="100" /><text x="620" y="135" fill="#666" font-size="12" font-family="Montserrat">MARKET</text>
-          <rect x="100" y="300" width="250" height="200" /><text x="170" y="410" fill="#666" font-size="14" font-family="Montserrat">GM OFFICE</text>
-          <rect x="400" y="280" width="160" height="140" /><text x="430" y="355" fill="#666" font-size="12" font-family="Montserrat">WORK ROOM</text>
-          <rect x="620" y="250" width="200" height="180" /><text x="670" y="350" fill="#666" font-size="12" font-family="Montserrat">FRONT DESK</text>
-          <rect x="750" y="150" width="150" height="120" /><text x="790" y="215" fill="#666" font-size="12" font-family="Montserrat">LOBBY</text>
-          <rect x="400" y="480" width="200" height="150" /><text x="455" y="560" fill="#666" font-size="12" font-family="Montserrat">OFFICE</text>
-          <rect x="650" y="480" width="180" height="150" /><text x="690" y="560" fill="#666" font-size="11" font-family="Montserrat">STORAGE</text>
-          <rect x="850" y="400" width="100" height="230" /><text x="860" y="520" fill="#666" font-size="10" font-family="Montserrat">VESTIBULE</text>
-          <line x1="50" y1="400" x2="350" y2="400" stroke-dasharray="8,4"/>
-          <line x1="350" y1="50" x2="350" y2="650" stroke-dasharray="8,4"/>
-        </svg>
-      </div>
-      <!-- Paging controls at bottom center of canvas -->
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-0 rounded-lg overflow-hidden shadow-lg" style="background:rgba(0,0,0,0.6)">
-        <button class="w-[36px] h-[36px] flex items-center justify-center text-white bg-transparent border-none cursor-pointer hover:bg-white/20 text-sm"><i class="fa-solid fa-chevron-left"></i></button>
-        <span class="px-3 text-sm font-medium text-white" id="takeoff-page-indicator">3 of 21</span>
-        <button class="w-[36px] h-[36px] flex items-center justify-center text-white bg-transparent border-none cursor-pointer hover:bg-white/20 text-sm"><i class="fa-solid fa-chevron-right"></i></button>
-      </div>
+    <!-- Paging controls -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-0 rounded-lg overflow-hidden shadow-lg" style="background:rgba(0,0,0,0.6);z-index:10">
+      <button class="w-[36px] h-[36px] flex items-center justify-center text-white bg-transparent border-none cursor-pointer hover:bg-white/20 text-sm"><i class="fa-solid fa-chevron-left"></i></button>
+      <span class="px-3 text-sm font-medium text-white" id="takeoff-page-indicator">3 of 21</span>
+      <button class="w-[36px] h-[36px] flex items-center justify-center text-white bg-transparent border-none cursor-pointer hover:bg-white/20 text-sm"><i class="fa-solid fa-chevron-right"></i></button>
     </div>
-  </div>
 
-  <!-- Estimating Cost Panel -->
-  <div class="h-full flex flex-col bg-white shrink-0" id="estimating-panel" style="width:380px;min-width:380px;border-left:1px solid #DAD8D7">
+    <!-- Estimating Cost Panel (overlays canvas) -->
+    <div class="flex flex-col bg-white shrink-0" id="estimating-panel" style="position:absolute;top:0;right:0;width:380px;height:100%;border-left:1px solid #DAD8D7;z-index:20">
     <div class="flex items-center" style="border-bottom:1px solid #DAD8D7">
       <div class="flex-1 text-center py-2.5 cursor-pointer" style="font-size:13px;font-weight:400;color:#495565" id="cost-tab-catalog" onclick="switchCostTab('catalog')">Catalog</div>
       <div class="flex-1 text-center py-2.5 cursor-pointer" style="font-size:13px;font-weight:700;color:#1C1E21;border-bottom:3px solid #0C79A8" id="cost-tab-cost" onclick="switchCostTab('cost')">Cost</div>
@@ -727,6 +709,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
         </button>
       </div>
     </div>
+  </div>
   </div>
 </div>
 
