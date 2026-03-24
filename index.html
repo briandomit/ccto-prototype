@@ -565,7 +565,9 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
     </div>
   </div>
 
-  <!-- Main takeoff area -->
+  <!-- Main takeoff area + cost panel wrapper -->
+  <div class="flex-1 flex h-full min-w-0 overflow-hidden">
+  <!-- Canvas area -->
   <div class="flex-1 relative h-full min-w-0 overflow-hidden" style="background:#e8e8e8">
     <!-- Canvas with floor plan -->
     <div class="absolute inset-0 flex items-center justify-center" id="takeoff-canvas">
@@ -1728,10 +1730,11 @@ function renderCostTab() {
       var badgeColor = isMat ? 'var(--neutral-500)' : 'var(--neutral-400)';
       var wasteInfo = item.waste > 0 ? item.netQty + ' ' + item.unit + ' net + ' + item.waste + '% waste = ' + item.adjQty + ' ' + item.unit : item.netQty + ' ' + item.unit + ' net';
 
-      html += '<div style="padding:' + (isMat ? '8px 0 4px' : '4px 0 8px') + '">';
+      html += '<div style="padding:' + (isMat ? '8px 0 4px' : '4px 0 8px') + '" onmouseenter="var b=this.querySelector(\'.ep-rm\');if(b)b.style.opacity=\'1\'" onmouseleave="var b=this.querySelector(\'.ep-rm\');if(b)b.style.opacity=\'0\'">';
       html += '<div style="display:flex;align-items:center;justify-content:space-between">';
       html += '<div style="display:flex;align-items:center;gap:6px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:' + badgeColor + ';background:' + badgeBg + ';padding:2px 6px;border-radius:3px">' + item.type + '</span><span style="font-size:13px;font-weight:500;color:var(--neutral-600)">' + item.name + '</span></div>';
       html += '<span style="font-size:14px;font-weight:600;color:var(--neutral-600)">' + fmt(item.extCost) + '</span>';
+      html += '<button class="ep-rm" onclick="removePricedItem(\'' + m.id + '\',' + m.pricedItems.indexOf(item) + ')" style="opacity:0;width:24px;height:24px;border:none;background:transparent;cursor:pointer;color:var(--neutral-400);font-size:11px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:opacity 150ms ease,color 150ms ease,background 150ms ease;margin-left:4px;flex-shrink:0" onmouseenter="this.style.background=\'var(--neutral-200)\';this.style.color=\'var(--status-error)\'" onmouseleave="this.style.background=\'transparent\';this.style.color=\'var(--neutral-400)\'"><i class="fa-solid fa-xmark"></i></button>';
       html += '</div>';
       html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">';
       html += '<div style="display:flex;align-items:center;gap:4px"><span style="font-size:12px;color:var(--neutral-500)">' + item.adjQty + ' ' + item.unit + '</span><span style="font-size:10px;color:var(--neutral-400);cursor:help" title="' + wasteInfo + '">ⓘ</span></div>';
@@ -1744,8 +1747,7 @@ function renderCostTab() {
 
     html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 16px;margin-top:4px">';
     html += '<div style="display:flex;gap:16px">';
-    html += '<button class="btn-link" style="padding:0;height:auto;font-size:12px" onclick="openCatalogForMeasurement(\'' + m.id + '\')">+ Material</button>';
-    html += '<button class="btn-link" style="padding:0;height:auto;font-size:12px" onclick="openCatalogForMeasurement(\'' + m.id + '\')">+ Labor</button>';
+    html += '<button class="btn-link" style="padding:0;height:auto;font-size:12px" onclick="openCatalogForMeasurement(\'' + m.id + '\')"><i class="fa-solid fa-plus" style="font-size:10px"></i> Add Item</button>';
     html += '</div>';
     html += '<span style="font-size:13px;font-weight:700;color:var(--neutral-600)">' + fmt(conditionTotal) + '</span>';
     html += '</div>';
@@ -1787,6 +1789,13 @@ function recalcCostMarkup() {
   var bidTotal = subtotal + (subtotal * pct / 100);
   var el = document.getElementById('cost-bid-total');
   if (el) el.textContent = fmt(bidTotal);
+}
+
+function removePricedItem(measurementId, itemIndex) {
+  var m = state.measurements.find(function(x) { return x.id === measurementId; });
+  if (!m || !m.pricedItems) return;
+  m.pricedItems.splice(itemIndex, 1);
+  renderEstimatingPanel();
 }
 
 // ===================== TABS =====================
