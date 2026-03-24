@@ -613,14 +613,15 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
   <div class="flex-1 flex flex-col h-full bg-white min-w-0 overflow-hidden">
     <div class="relative" style="height:60px;flex-shrink:0">
       <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.95);border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.12);padding:6px 16px;display:flex;align-items:center;gap:6px;height:44px;z-index:10">
-        <div class="flex items-center gap-1">
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] text-placeholder hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Select"><i class="fa-solid fa-arrow-pointer"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] text-placeholder hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Pan"><i class="fa-solid fa-hand"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] text-placeholder hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Undo"><i class="fa-solid fa-rotate-left"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] text-placeholder hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Redo"><i class="fa-solid fa-rotate-right"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] text-placeholder hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Highlight"><i class="fa-solid fa-pen"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] text-placeholder hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Text"><i class="fa-solid fa-t"></i></button>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] text-placeholder hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Measure"><i class="fa-solid fa-ruler"></i></button>
+        <div class="flex items-center gap-1" style="color:#4A4F55">
+          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Select"><i class="fa-solid fa-arrow-pointer"></i></button>
+          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Pan"><i class="fa-solid fa-hand"></i></button>
+          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Undo"><i class="fa-solid fa-rotate-left"></i></button>
+          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Redo"><i class="fa-solid fa-rotate-right"></i></button>
+          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Highlight"><i class="fa-solid fa-pen"></i></button>
+          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Text"><i class="fa-solid fa-t"></i></button>
+          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="Measure"><i class="fa-solid fa-ruler"></i></button>
+          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" id="btn-toggle-estimating" onclick="toggleEstimatingPanel()" title="Toggle Estimating Panel"><i class="fa-solid fa-calculator"></i></button>
         </div>
         <div style="width:1px;height:24px;background:#DAD8D7;margin:0 6px"></div>
         <button style="display:flex;align-items:center;gap:6px;background:#FFF3E0;border:1.5px solid #F5A623;border-radius:6px;padding:4px 12px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#1C1E21;white-space:nowrap;height:32px" title="Set Scale">
@@ -628,14 +629,13 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
         </button>
         <div style="width:1px;height:24px;background:#DAD8D7;margin:0 6px"></div>
         <div class="flex items-center gap-2">
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] border-none cursor-pointer" id="btn-toggle-estimating" onclick="toggleEstimatingPanel()" title="Toggle Estimating Panel" style="background:#0C79A8;color:#fff"><i class="fa-solid fa-calculator"></i></button>
-          <div class="flex items-center -space-x-2 ml-1">
+          <div class="flex items-center -space-x-2">
             <div class="w-[30px] h-[30px] rounded-full flex items-center justify-center text-[11px] text-white font-bold border-2 border-white" style="background:#F5A623">A</div>
             <div class="w-[30px] h-[30px] rounded-full flex items-center justify-center text-[11px] text-white font-bold border-2 border-white" style="background:#4CAF50">B</div>
             <div class="w-[30px] h-[30px] rounded-full flex items-center justify-center text-[11px] text-white font-bold border-2 border-white" style="background:#E57373">C</div>
           </div>
           <span style="font-size:13px;font-weight:600;color:#495565">+2</span>
-          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] text-placeholder hover:bg-gray-100 border-none bg-transparent cursor-pointer" title="More options"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+          <button class="w-[32px] h-[32px] rounded-md flex items-center justify-center text-[15px] hover:bg-gray-100 border-none bg-transparent cursor-pointer" style="color:#4A4F55" title="More options"><i class="fa-solid fa-ellipsis-vertical"></i></button>
         </div>
       </div>
     </div>
@@ -2189,12 +2189,10 @@ function toggleEstimatingPanel() {
   if (!panel || !btn) return;
   if (panel.style.display === 'none') {
     panel.style.display = 'flex';
-    btn.style.background = '#0C79A8';
-    btn.style.color = '#fff';
+    btn.style.color = '#0C79A8';
   } else {
     panel.style.display = 'none';
-    btn.style.background = 'transparent';
-    btn.style.color = '#495565';
+    btn.style.color = '';
   }
 }
 
