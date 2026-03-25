@@ -566,7 +566,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
   </div>
 
   <!-- Main takeoff area + cost panel wrapper -->
-  <div class="flex-1 flex h-full min-w-0 overflow-hidden">
+  <div class="flex-1 relative h-full min-w-0 overflow-hidden">
   <!-- Canvas area -->
   <div class="flex-1 relative h-full min-w-0 overflow-hidden" style="background:#e8e8e8">
     <!-- Canvas with floor plan -->
@@ -612,7 +612,7 @@ table th.p-2\.5, table td.p-2\.5 { padding: 17px 10px !important; }
   <!-- END canvas area -->
 
   <!-- Estimating Cost Panel (docked right side) -->
-  <div class="flex flex-col bg-white shrink-0" id="estimating-panel" style="display:flex;width:380px;height:100%;border-left:1px solid #DAD8D7">
+  <div class="flex flex-col bg-white" id="estimating-panel" style="display:flex;position:absolute;top:0;right:0;width:380px;height:100%;border-left:1px solid #DAD8D7;z-index:20;box-shadow:-4px 0 12px rgba(0,0,0,0.08)">
 
     <!-- Tab bar -->
     <div id="ep-tab-bar" class="flex items-center" style="border-bottom:1px solid var(--neutral-300)">
